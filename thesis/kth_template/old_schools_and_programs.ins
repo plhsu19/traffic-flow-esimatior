@@ -1,0 +1,73 @@
+\newcommand{\programcode}[1]{%
+  \ifinswedish
+  \IfEqCase{#1}{%
+    {CDATE}{\programme{Civilingenjörsutbildning i datateknik}}%
+    {CELTE}{\programme{Civilingenjörsutbildning i elektroteknik}}%
+    {CINTE}{\programme{Civilingenjörsutbildning i informationsteknik}}%
+    {CMETE}{\programme{Civilingenjörsutbildning i medieteknik}}%
+    {TCOMK}{\programme{Kandidatprogram, informations- och kommunikationsteknik}}%
+    {TCOMM}{\programme{Masterprogram, kommunikationssystem}}%
+    {TCSCM}{\programme{Masterprogram, datalogi}}%
+    {TEBSM}{\programme{Masterprogram, inbyggda system}}%
+    {TEFRM}{\programme{Masterprogram, elektromagnetism, fusion och rymdteknik}}%
+    {TELPM}{\programme{Masterprogram, elkraftteknik}}%
+    {TIDAB}{\programme{Högskoleingenjörsutbildning i datateknik, Kista}}%
+    {TIEDB}{\programme{Högskoleingenjörsutbildning i elektronik och datorteknik}}%
+    {TIELA}{\programme{Högskoleingenjörsutbildning i elektroteknik, Flemingsberg}}%
+    {TIETM}{\programme{Masterprogram, innovativ energiteknik}}%
+    {TIMTM}{\programme{Masterprogram, interaktiv medieteknik}}%
+    {TINNM}{\programme{Masterprogram, information och n\u00e4tverksteknologi}}%
+    {TIVNM}{\programme{Masterprogram, ICT Innovation}}%
+    {TMAIM}{\programme{Masterprogram, maskininl\u00e4rning}}%
+    {TMMTM}{\programme{Masterprogram, media management}}%
+    {TNTEM}{\programme{Masterprogram, nanoteknik}}%
+    {TSCRM}{\programme{Masterprogram, systemteknik och robotik}}%
+    {TSEDM}{\programme{Masterprogram, programvaruteknik för distribuerade system}}%
+  }[\typeout{program's code not found}]
+  \else
+  \IfEqCase{#1}{%
+    {CDATE}{\programme{Degree Programme in Computer Science and Engineering}}%
+    {CELTE}{\programme{Degree Programme in Electrical Engineering}}%
+    {CINTE}{\programme{Degree Programme in Information and Communication Technology}}%
+    {CMETE}{\programme{Degree Programme in Media Technology}}%
+    {TCOMK}{\programme{Bachelor's Programme in Information and Communication Technology}}%
+    {TCOMM}{\programme{Master's Programme, Communication Systems}}%
+    {TCSCM}{\programme{Master's Programme, Computer Science}}%
+    {TEBSM}{\programme{Master's Programme, Embedded Systems}}%
+    {TEFRM}{\programme{Master's Programme, Electromagnetics, Fusion and Space Engineering}}%
+    {TELPM}{\programme{Master's Programme, Electric Power Engineering}}%
+    {TIDAB}{\programme{Degree Programme in Computer Engineering}}%
+    {TIEDB}{\programme{Degree Programme in Electronics and Computer Engineering}}%
+    {TIELA}{\programme{Degree Programme in Electrical Engineering}}%
+    {TIETM}{\programme{Master's Programme, Energy Innovation}}%
+    {TIMTM}{\programme{Master's Programme, Interactive Media Technology}}%
+    {TINNM}{\programme{Master's Programme, Information and Network Engineering}}%
+    {TIVNM}{\programme{Master's Programme, ICT Innovation}}%
+    {TMAIM}{\programme{Master's Programme, Machine Learning}}%
+    {TMMTM}{\programme{Master's Programme, Media Management}}%
+    {TNTEM}{\programme{Master's Programme, Nanotechnology}}%
+    {TSCRM}{\programme{Master's Programme, Systems, Control and Robotics}}%
+    {TSEDM}{\programme{Master's Programme, Software Engineering of Distributed Systems}}%
+  }[\typeout{program's code not found}]
+  \fi
+}
+
+\newcommand{\schoolAcronym}[1]{%
+  \ifinswedish
+  \IfEqCase{#1}{%
+    {ABE}{\school{Skolan för Arkitektur och samhällsbyggnad}}%
+    {CBH}{\school{Skolan för Kemi, bioteknologi och hälsa}}%
+    {EECS}{\school{Skolan för elektroteknik och datavetenskap}}%
+    {ITM}{\school{Skolan för Industriell teknik och management}}%
+    {SCI}{\school{Skolan för Teknikvetenskap}}%
+  }[\typeout{school's code not found}]
+  \else
+  \IfEqCase{#1}{%
+    {ABE}{\school{School of Architecture and the Built Environment}}%
+    {CBH}{\school{School of Engineering Sciences in Chemistry, Biotechnology and Health}}%
+    {EECS}{\school{School of Electrical Engineering and Computer Science}}%
+    {ITM}{\school{School of Industrial Engineering and Management}}%
+    {SCI}{\school{School of Engineering Sciences}}%
+  }[\typeout{school's code not found}]
+  \fi
+}

@@ -1,0 +1,154 @@
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Background}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Original problem and definition}{2}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Scientific and engineering issues}{2}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Purpose}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Goals}{3}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Research Methodology}{3}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Delimitations}{4}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Structure of the thesis}{4}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Background}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Major background area 1}{5}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Subarea 1.1}{6}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Subarea 1.1.2}{7}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Subarea 1.1.2}{7}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Link layer Encapsulation}{7}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}IP packet headers}{7}{subsection.2.1.5}%
+\contentsline {section}{\numberline {2.2}Major background area 2}{7}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Related work area}{8}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Major related work 1}{8}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Major related work}{9}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Minor related work 1}{9}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Minor related work n}{9}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}Summary}{9}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Method or Methods}{11}{chapter.3}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {3.1}Research Process}{13}{section.3.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {3.2}Research Paradigm}{13}{section.3.2}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {3.3}Data Collection}{13}{section.3.3}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {subsection}{\numberline {3.3.1}Sampling}{14}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Sample Size}{14}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Target Population}{14}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Experimental design/Planned Measurements}{14}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Test environment/test bed/model}{14}{subsection.3.4.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {subsection}{\numberline {3.4.2}Hardware/Software to be used}{14}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Assessing reliability and validity of the data collected}{15}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Validity of method}{15}{subsection.3.5.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {subsection}{\numberline {3.5.2}Reliability of method}{15}{subsection.3.5.2}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {subsection}{\numberline {3.5.3}Data validity}{15}{subsection.3.5.3}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {subsection}{\numberline {3.5.4}Reliability of data}{15}{subsection.3.5.4}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {3.6}Planned Data Analysis}{16}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Data Analysis Technique}{16}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Software Tools}{16}{subsection.3.6.2}%
+\contentsline {section}{\numberline {3.7}Evaluation framework}{16}{section.3.7}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {3.8}System documentation}{16}{section.3.8}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {chapter}{\numberline {4}What you did}{17}{chapter.4}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {4.1}Hardware/Software design …/Model/Simulation model \& parameters/…}{17}{section.4.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {4.2}Implementation …/Modeling/Simulation/…}{18}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Some examples of coding}{18}{subsection.4.2.1}%
+\contentsline {chapter}{\numberline {5}Results and Analysis}{21}{chapter.5}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {5.1}Major results}{21}{section.5.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {5.2}Reliability Analysis}{23}{section.5.2}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {5.3}Validity Analysis}{23}{section.5.3}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {chapter}{\numberline {6}Discussion}{25}{chapter.6}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {chapter}{\numberline {7}Conclusions and Future work}{27}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusions}{27}{section.7.1}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {7.2}Limitations}{28}{section.7.2}%
+\babel@toc {swedish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\babel@toc {USenglish}{}
+\contentsline {section}{\numberline {7.3}Future work}{28}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}What has been left undone?}{28}{subsection.7.3.1}%
+\contentsline {subsubsection}{Cost analysis}{28}{subsubsection*.104}%
+\contentsline {subsubsection}{Security}{29}{subsubsection*.105}%
+\contentsline {subsection}{\numberline {7.3.2}Next obvious things to be done}{29}{subsection.7.3.2}%
+\contentsline {section}{\numberline {7.4}Reflections}{29}{section.7.4}%
+\contentsline {chapter}{References}{31}{section*.110}%
+\contentsline {chapter}{\numberline {A}Something Extra}{33}{appendix.A}%

@@ -1,0 +1,244 @@
+\newcommand{\schoolAcronym}[1]{%
+  \ifinswedish
+  \IfEqCase{#1}{%
+    {ABE}{\school{Skolan för Arkitektur och samhällsbyggnad}}%
+    {ITM}{\school{Skolan för Industriell teknik och management}}%
+    {SCI}{\school{Skolan för Teknikvetenskap}}%
+    {CBH}{\school{Skolan för Kemi, bioteknologi och hälsa}}%
+    {EECS}{\school{Skolan för Elektroteknik och datavetenskap}}%
+  }[\typeout{school's code not found}]
+  \else
+  \IfEqCase{#1}{%
+    {ABE}{\school{School of Architecture and the Built Environment}}%
+    {ITM}{\school{School of Industrial Engineering and Management}}%
+    {SCI}{\school{School of Engineering Sciences}}%
+    {CBH}{\school{School of Engineering Sciences in Chemistry, Biotechnology and Health}}%
+    {EECS}{\school{School of Electrical Engineering and Computer Science}}%
+  }[\typeout{school's code not found}]
+  \fi
+}
+\newcommand{\programcode}[1]{%
+  \ifinswedish
+  \IfEqCase{#1}{%
+    {ARKIT}{\programme{Arkitektutbildning}}%
+    {CBIOT}{\programme{Civilingenjörsutbildning i bioteknik}}%
+    {CDATE}{\programme{Civilingenjörsutbildning i datateknik}}%
+    {CDEPR}{\programme{Civilingenjörsutbildning i design och produktframtagning}}%
+    {CELTE}{\programme{Civilingenjörsutbildning i elektroteknik}}%
+    {CENMI}{\programme{Civilingenjörsutbildning i energi och miljö}}%
+    {CFATE}{\programme{Civilingenjörsutbildning i farkostteknik}}%
+    {CINEK}{\programme{Civilingenjörsutbildning i industriell ekonomi}}%
+    {CINTE}{\programme{Civilingenjörsutbildning i informationsteknik}}%
+    {CITEH}{\programme{Civilingenjörsutbildning i industriell teknik och hållbarhet}}%
+    {CLGYM}{\programme{Civilingenjör och lärare}}%
+    {CMAST}{\programme{Civilingenjörsutbildning i maskinteknik}}%
+    {CMATD}{\programme{Civilingenjörsutbildning i materialdesign}}%
+    {CMEDT}{\programme{Civilingenjörsutbildning i medicinsk teknik}}%
+    {CMETE}{\programme{Civilingenjörsutbildning i medieteknik}}%
+    {COPEN}{\programme{Civilingenjörsutbildning öppen ingång}}%
+    {CSAMH}{\programme{Civilingenjörsutbildning i samhällsbyggnad}}%
+    {CTFYS}{\programme{Civilingenjörsutbildning i teknisk fysik}}%
+    {CTKEM}{\programme{Civilingenjörsutbildning i teknisk kemi}}%
+    {CTMAT}{\programme{Civilingenjörsutbildning i teknisk matematik}}%
+    {KPUFU}{\programme{Kompletterande pedagogisk utbildning för ämneslärarexamen i matematik, naturvetenskap och teknik för forskarutbildade}}%
+    {KPULU}{\programme{Kompletterande pedagogisk utbildning}}%
+    {KUAUT}{\programme{Kompletterande utbildning för arkitekter med avslutad utländsk utbildning}}%
+    {KUIUT}{\programme{Kompletterande utbildning för ingenjörer med avslutad utländsk utbildning}}%
+    {LÄRGR}{\programme{Ämneslärarutbildning med inriktning mot teknik, årskurs 7-9}}%
+    {TAEEM}{\programme{Masterprogram, flyg- och rymdteknik}}%
+    {TAETM}{\programme{Masterprogram, aeroelasticitet i turbomaskiner}}%
+    {TARKM}{\programme{Masterprogram, arkitektur}}%
+    {TBASA}{\programme{Tekniskt basår, KTH Flemingsberg}}%
+    {TBASD}{\programme{Tekniskt basår, KTH Campus}}%
+    {TBASE}{\programme{Tekniskt basår, KTH Södertälje}}%
+    {TBTMD}{\programme{Tekniskt basår, termin 2, KTH Campus}}%
+    {TBTMH}{\programme{Tekniskt basår, termin 2, KTH Flemingsberg}}%
+    {TBTMS}{\programme{Tekniskt basår, termin 2, KTH Södertälje}}%
+    {TBYPH}{\programme{Högskoleutbildning i byggproduktion}}%
+    {TCAEM}{\programme{Masterprogram, husbyggnads- och anläggningsteknik}}%
+    {TCOMK}{\programme{Kandidatprogram, informations- och kommunikationsteknik}}%
+    {TCOMM}{\programme{Masterprogram, kommunikationssystem}}%
+    {TCSCM}{\programme{Masterprogram, datalogi}}%
+    {TDEBM}{\programme{Magisterprogram, design och byggande i staden}}%
+    {TDSEM}{\programme{Masterprogram, decentraliserade smarta energisystem}}%
+    {TDTNM}{\programme{Masterprogram, datorsimuleringar inom teknik och naturvetenskap}}%
+    {TEBSM}{\programme{Masterprogram, inbyggda system}}%
+    {TEEEM}{\programme{Masterprogram, teknik och ledning för energi- och miljösystem}}%
+    {TEEGM}{\programme{Masterprogram, miljöteknik}}%
+    {TEFRM}{\programme{Masterprogram, elektromagnetism, fusion och rymdteknik}}%
+    {TEILM}{\programme{Magisterprogram, entreprenörskap och innovationsledning}}%
+    {TEINM}{\programme{Masterprogram, innovations- och tillväxtekonomi}}%
+    {TELPM}{\programme{Masterprogram, elkraftteknik}}%
+    {TFAFK}{\programme{Kandidatprogram, Fastighetsutveckling med fastighetsförmedling}}%
+    {TFAHM}{\programme{Magisterprogram, fastigheter}}%
+    {TFOBM}{\programme{Masterprogram, fastigheter och byggande}}%
+    {TFOFK}{\programme{Kandidatprogram, fastighet och finans}}%
+    {TFORM}{\programme{Masterprogram, fordonsteknik}}%
+    {THSSM}{\programme{Masterprogram, hållbar samhällsplanering och stadsutformning}}%
+    {TIBYH}{\programme{Högskoleingenjörsutbildning i byggteknik och design}}%
+    {TIDAA}{\programme{Högskoleingenjörsutbildning i datateknik, Flemingsberg}}%
+    {TIDAB}{\programme{Högskoleingenjörsutbildning i datateknik, Kista}}%
+    {TIDTM}{\programme{Masterprogram, idrottsteknologi}}%
+    {TIEDB}{\programme{Högskoleingenjörsutbildning i elektronik och datorteknik}}%
+    {TIEEM}{\programme{Masterprogram, innovativ uthållig energiteknik}}%
+    {TIELA}{\programme{Högskoleingenjörsutbildning i elektroteknik, Flemingsberg}}%
+    {TIEMM}{\programme{Masterprogram, industriell ekonomi}}%
+    {TIETM}{\programme{Masterprogram, innovativ energiteknik}}%
+    {TIHLM}{\programme{Masterprogram, innovativ teknik för en hälsosam livsmiljö}}%
+    {TIIPS}{\programme{Högskoleingenjörsutbildning i industriell teknik och produktionsunderhåll}}%
+    {TIKED}{\programme{Högskoleingenjörsutbildning i kemiteknik}}%
+    {TIMAS}{\programme{Högskoleingenjörsutbildning i maskinteknik, Södertälje}}%
+    {TIMBM}{\programme{Masterprogram, Industriell och miljöinriktad bioteknologi}}%
+    {TIMEL}{\programme{Högskoleingenjörsutbildning i medicinsk teknik}}%
+    {TIMTM}{\programme{Masterprogram, interaktiv medieteknik}}%
+    {TINEM}{\programme{Masterprogram, industriell ekonomi}}%
+    {TINNM}{\programme{Masterprogram, information och nätverksteknologi}}%
+    {TIPDM}{\programme{Masterprogram, integrerad produktdesign}}%
+    {TIPUM}{\programme{Masterprogram, industriell produktutveckling}}%
+    {TITEH}{\programme{Högskoleingenjörsutbildning i teknik och ekonomi}}%
+    {TITHM}{\programme{Masterprogram, hållbar produktionsutveckling}}%
+    {TIVNM}{\programme{Masterprogram, ICT Innovation}}%
+    {TJVTM}{\programme{Masterprogram, järnvägsteknik}}%
+    {TKEMM}{\programme{Masterprogram, kemiteknik för energi och miljö}}%
+    {TLODM}{\programme{Magisterprogram, ljusdesign}}%
+    {TMAIM}{\programme{Masterprogram, maskininlärning}}%
+    {TMAKM}{\programme{Masterprogram, matematik}}%
+    {TMBIM}{\programme{Masterprogram, medicinsk bioteknologi}}%
+    {TMEGM}{\programme{Masterprogram, marinteknik}}%
+    {TMESM}{\programme{Masterprogram, miljövänliga energisystem}}%
+    {TMHIM}{\programme{Masterprogram, miljöteknik och hållbar infrastruktur}}%
+    {TMLEM}{\programme{Masterprogram, medicinsk teknik}}%
+    {TMMMM}{\programme{Masterprogram, makromolekylära material}}%
+    {TMMTM}{\programme{Masterprogram, media management}}%
+    {TMRSM}{\programme{Masterprogram, marina system}}%
+    {TMTLM}{\programme{Masterprogram, molekylära tekniker inom livsvetenskaperna}}%
+    {TMVTM}{\programme{Masterprogram, molekylär vetenskap och teknik}}%
+    {TNEEM}{\programme{Masterprogram, kärnenergiteknik}}%
+    {TNTEM}{\programme{Masterprogram, nanoteknik}}%
+    {TPRMM}{\programme{Masterprogram, industriell produktion}}%
+    {TSCRM}{\programme{Masterprogram, systemteknik och robotik}}%
+    {TSEDM}{\programme{Masterprogram, programvaruteknik för distribuerade system}}%
+    {TSUEM}{\programme{Masterprogram, hållbar energiteknik}}%
+    {TSUTM}{\programme{Masterprogram, teknik och hållbar utveckling}}%
+    {TTAHM}{\programme{Masterprogram, teknik, arbete och hälsa}}%
+    {TTEMM}{\programme{Masterprogram, teknisk mekanik}}%
+    {TTFYM}{\programme{Masterprogram, teknisk fysik}}%
+    {TTGTM}{\programme{Masterprogram, transport och geoinformatik}}%
+    {TTMAM}{\programme{Masterprogram, tillämpad matematik och beräkningsmatematik}}%
+    {TTMIM}{\programme{Masterprogram, transport, mobilitet och innovation}}%
+    {TTMVM}{\programme{Masterprogram, teknisk materialvetenskap}}%
+    {TURSM}{\programme{Magisterprogram, urbana studier}}%
+  }[\typeout{program's code not found}]
+  \else
+  \IfEqCase{#1}{%
+    {ARKIT}{\programme{Degree Programme in Architecture}}%
+    {CBIOT}{\programme{Degree Programme in Biotechnology}}%
+    {CDATE}{\programme{Degree Programme in Computer Science and Engineering}}%
+    {CDEPR}{\programme{Degree Programme in Design and Product Realisation}}%
+    {CELTE}{\programme{Degree Programme in Electrical Engineering}}%
+    {CENMI}{\programme{Degree Programme in Energy and Environment}}%
+    {CFATE}{\programme{Degree Programme in Vehicle Engineering}}%
+    {CINEK}{\programme{Degree Programme in Industrial Engineering and Management}}%
+    {CINTE}{\programme{Degree Programme in Information and Communication Technology}}%
+    {CITEH}{\programme{Degree Programme in Industrial Technology and Sustainability}}%
+    {CLGYM}{\programme{Master of Science in Engineering and in Education}}%
+    {CMAST}{\programme{Degree Programme in Mechanical Engineering}}%
+    {CMATD}{\programme{Degree Programme in Materials Design and Engineering}}%
+    {CMEDT}{\programme{Degree Programme in Medical Engineering}}%
+    {CMETE}{\programme{Degree Programme in Media Technology}}%
+    {COPEN}{\programme{Degree Programme Open Entrance}}%
+    {CSAMH}{\programme{Degree Programme in Civil Engineering and Urban Management}}%
+    {CTFYS}{\programme{Degree Programme in Engineering Physics}}%
+    {CTKEM}{\programme{Degree Programme in Engineering Chemistry}}%
+    {CTMAT}{\programme{Degree Programme in Engineering Mathematics}}%
+    {KPUFU}{\programme{Bridging Teacher Education Programme in Mathematics, Science and Technology for Graduates with a Third Cycle Degree}}%
+    {KPULU}{\programme{Bridging Teacher Education Programme}}%
+    {KUAUT}{\programme{Bridging programme for architects with foreign qualifications}}%
+    {KUIUT}{\programme{Bridging programme for engineers with foreign qualifications}}%
+    {LÄRGR}{\programme{Subject Teacher Education in Technology, Secondary Education}}%
+    {TAEEM}{\programme{Master's Programme, Aerospace Engineering, 120 credits}}%
+    {TAETM}{\programme{Master's Programme, Turbomachinery Aeromechanic University Training, 120 credits}}%
+    {TARKM}{\programme{Master's Programme, Architecture, 120 credits}}%
+    {TBASA}{\programme{Technical Preparatory Year}}%
+    {TBASD}{\programme{Technical Preparatory Year}}%
+    {TBASE}{\programme{Technical Preparatory Year}}%
+    {TBTMD}{\programme{Technical Preparatory Semester}}%
+    {TBTMH}{\programme{Technical Preparatory Semester}}%
+    {TBTMS}{\programme{Technical Preparatory Semester}}%
+    {TBYPH}{\programme{Degree Progr. in Construction Management}}%
+    {TCAEM}{\programme{Master's Programme, Civil and Architectural Engineering, 120 credits}}%
+    {TCOMK}{\programme{Bachelor's Programme in Information and Communication Technology}}%
+    {TCOMM}{\programme{Master's Programme, Communication Systems, 120 credits}}%
+    {TCSCM}{\programme{Master's Programme, Computer Science, 120 credits}}%
+    {TDEBM}{\programme{Master's Programme, Urban Development and Design, 60 credits}}%
+    {TDSEM}{\programme{Master's Programme, Decentralized Smart Energy Systems, 120 credits}}%
+    {TDTNM}{\programme{Master's Programme, Computer Simulations for Science and Engineering, 120 credits}}%
+    {TEBSM}{\programme{Master's Programme, Embedded Systems, 120 credits}}%
+    {TEEEM}{\programme{Master's Programme, Management and Engineering of Environment and Energy, 120 credits}}%
+    {TEEGM}{\programme{Master's Programme, Environmental Engineering, 120 credits}}%
+    {TEFRM}{\programme{Master's Programme, Electromagnetics, Fusion and Space Engineering, 120 credits}}%
+    {TEILM}{\programme{Master's Programme, Entrepreneurship and Innovation Management, 60 credits}}%
+    {TEINM}{\programme{Master's Programme, Economics of Innovation and Growth, 120 credits}}%
+    {TELPM}{\programme{Master's Programme, Electric Power Engineering, 120 credits}}%
+    {TFAFK}{\programme{Bachelor's Programme in Property Development and Agency}}%
+    {TFAHM}{\programme{Master's Programme, Real Estate}}%
+    {TFOBM}{\programme{Master's Programme, Real Estate and Construction Management, 120 credits}}%
+    {TFOFK}{\programme{Bachelor's Programme in Real Estate and Finance}}%
+    {TFORM}{\programme{Master's Programme, Vehicle Engineering, 120 credits}}%
+    {THSSM}{\programme{Master's Programme, Sustainable Urban Planning and Design, 120 credits}}%
+    {TIBYH}{\programme{Degree Programme in Constructional Engineering and Design}}%
+    {TIDAA}{\programme{Degree Programme in Computer Engineering}}%
+    {TIDAB}{\programme{Degree Programme in Computer Engineering}}%
+    {TIDTM}{\programme{Master's Programme, Sports Technology}}%
+    {TIEDB}{\programme{Degree Programme in Electronics and Computer Engineering}}%
+    {TIEEM}{\programme{Master's Programme, Innovative Sustainable Energy Engineering, 120 credits}}%
+    {TIELA}{\programme{Degree Programme in Electrical Engineering}}%
+    {TIEMM}{\programme{Master's Programme, Industrial Engineering and Management, 120 credits}}%
+    {TIETM}{\programme{Master's Programme, Energy Innovation, 120 credits}}%
+    {TIHLM}{\programme{Master's Programme, Innovative Technology for Healthy Living}}%
+    {TIIPS}{\programme{Degree Programme in Industrial Technology and Production Maintenance}}%
+    {TIKED}{\programme{Degree Programme in Chemical Engineering}}%
+    {TIMAS}{\programme{Degree Programme in Mechanical Engineering}}%
+    {TIMBM}{\programme{Master's Programme, Industrial and Environmental Biotechnology, 120 credits}}%
+    {TIMEL}{\programme{Degree Programme in Medical Technology}}%
+    {TIMTM}{\programme{Master's Programme, Interactive Media Technology, 120 credits}}%
+    {TINEM}{\programme{Master's Programme, Industrial Management, 120 credits}}%
+    {TINNM}{\programme{Master's Programme, Information and Network Engineering, 120 credits}}%
+    {TIPDM}{\programme{Master's Programme, Integrated Product Design, 120 credits}}%
+    {TIPUM}{\programme{Master's Programme, Engineering Design, 120 credits}}%
+    {TITEH}{\programme{Degree Programme in Engineering and Economics}}%
+    {TITHM}{\programme{Master's Programme, Sustainable Production Development, 120 credits}}%
+    {TIVNM}{\programme{Master's Programme, ICT Innovation, 120 credits}}%
+    {TJVTM}{\programme{Master's Programme, Railway Engineering, 120 credits}}%
+    {TKEMM}{\programme{Master's Programme, Chemical Engineering for Energy and Environment, 120 credits}}%
+    {TLODM}{\programme{Master's Programme,  Architectural Lighting Design, 60 credits}}%
+    {TMAIM}{\programme{Master's Programme, Machine Learning, 120 credits}}%
+    {TMAKM}{\programme{Master's Programme, Mathematics, 120 credits}}%
+    {TMBIM}{\programme{Master's Programme, Medical Biotechnology, 120 credits}}%
+    {TMEGM}{\programme{Master's Programme, Maritime Engineering, 120 credits}}%
+    {TMESM}{\programme{Master's Programme, Environomical Pathways for Sustainable Energy Systems, 120 credits}}%
+    {TMHIM}{\programme{Master's Programme, Environmental Engineering and Sustainable Infrastructure, 120 credits}}%
+    {TMLEM}{\programme{Master's Programme, Medical Engineering, 120 credits}}%
+    {TMMMM}{\programme{Master's Programme, Macromolecular Materials, 120 credits}}%
+    {TMMTM}{\programme{Master's Programme, Media Management, 120 credits}}%
+    {TMRSM}{\programme{Master's Programme, Naval Architecture, 120 credits}}%
+    {TMTLM}{\programme{Master's Programme, Molecular Techniques in Life Science, 120 credits}}%
+    {TMVTM}{\programme{Master's Programme, Molecular Science and Engineering, 120 credits}}%
+    {TNEEM}{\programme{Master's Programme, Nuclear Energy Engineering, 120 credits}}%
+    {TNTEM}{\programme{Master's Programme, Nanotechnology, 120 credits}}%
+    {TPRMM}{\programme{Master's Programme, Production Engineering and Management, 120 credits}}%
+    {TSCRM}{\programme{Master's Programme, Systems, Control and Robotics, 120 credits}}%
+    {TSEDM}{\programme{Master's Programme, Software Engineering of Distributed Systems, 120 credits}}%
+    {TSUEM}{\programme{Master's Programme, Sustainable Energy Engineering, 120 credits}}%
+    {TSUTM}{\programme{Master's Programme, Sustainable Technology, 120 credits}}%
+    {TTAHM}{\programme{Master's Programme, Technology, Work and Health, 120 credits}}%
+    {TTEMM}{\programme{Master's Programme, Engineering Mechanics, 120 credits}}%
+    {TTFYM}{\programme{Master's Programme, Engineering Physics, 120 credits}}%
+    {TTGTM}{\programme{Master's Programme, Transport and Geoinformation Technology, 120 credits}}%
+    {TTMAM}{\programme{Master's Programme, Applied and Computational Mathematics, 120 credits}}%
+    {TTMIM}{\programme{Master's Programme, Transport, Mobility and Innovation}}%
+    {TTMVM}{\programme{Master's Programme, Engineering Materials Science, 120 credits}}%
+    {TURSM}{\programme{Master's Programme, Urbanism Studies, 60 credits}}%
+  }[\typeout{program's code not found}]
+  \fi
+}
