@@ -96,6 +96,9 @@
 \graphicspath{{figures/}}
 \usepackage{notoccite}
 \usepackage{subcaption}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
   
   
 % document (body) begins
@@ -380,7 +383,7 @@ This chapter provides users with background knowledge about the traffic state es
 
 \section{Traffic State Estimation}
 \label{sec:tse}
-According to Seo et al. \cite{seo_tse}, “Traffic State Estimation refers to the process of inference of traffic state variables, namely flow (veh/h), density (veh/km), speed (km/h), and other equivalent variables, on road segments, using partially observed and noisy traffic data.” As we mentioned in the introduction, accurate information of traffic state is essential for traffic control \cite{seo_tse}, traffic emission monitoring \cite{tsanakas_emission_estimation}, and the development of ITS \cite{seo_tse_xfcd}. However, traffic state variables are not observable everywhere and anytime on highway segments. We need to estimate the traffic state in the regions where traffic state variables are not observed or partially observed. 
+According to Seo et al. \cite{seo_tse}, \textit{“Traffic State Estimation refers to the process of inference of traffic state variables, namely flow (veh/h), density (veh/km), speed (km/h), and other equivalent variables, on road segments, using partially observed and noisy traffic data.”} As we mentioned in the introduction, accurate information of traffic state is essential for traffic control \cite{seo_tse}, traffic emission monitoring \cite{tsanakas_emission_estimation}, and the development of ITS \cite{seo_tse_xfcd}. However, traffic state variables are not observable everywhere and anytime on highway segments. We need to estimate the traffic state in the regions where traffic state variables are not observed or partially observed. 
 
 \begin{figure}[!ht]
     \centering
@@ -535,7 +538,7 @@ This chapter provides an overview of the datasets and the methods used in the th
 
 \section{Datasets}
 \label{sec:datasets}
-Traffic data provided by two sensor platforms are used to train and test the estimation models in the thesis, i.e., the INRIX and the \gls{mcs}. INRIX datasets belong to the mobile data, while MCS datasets are a kind of stationary data introduced in section~\ref{sec:dataTypes} The data are collected from two consecutive road segments on the four-lane E4 highway, southbound, in Stockholm from 2018-10-01 to 2018-10-31. Figure~\ref{fig:inrixMcsLocation} shows the locations of INRIX road segments and MCS sensors on the map. Table~\ref{table:segmentIDs} lists the IDs for INRIX road segments and MCS sensors in the datasets. We use "south" to denote segment 1071883675 and sensor 1159 and use "north" to denote segment 225285973 and sensor 1162 in the thesis.
+Traffic data provided by two sensor platforms are used to train and test the estimation models in the thesis, i.e., the INRIX and the \gls{mcs}. INRIX datasets belong to the mobile data, while MCS datasets are a kind of stationary data introduced in section~\ref{sec:dataTypes} The data are collected from two consecutive road segments on the four-lane E4 highway, southbound, in Stockholm from 2018-10-01 to 2018-10-31. Figure~\ref{fig:inrixMcsLocation} shows the locations of INRIX road segments and MCS sensors on the map. Table~\ref{tab:segmentIDs} lists the IDs for INRIX road segments and MCS sensors in the datasets. We use "south" to denote segment 1071883675 and sensor 1159 and use "north" to denote segment 225285973 and sensor 1162 in the thesis.
 
 \begin{figure}[!ht]
     \centering
@@ -556,23 +559,129 @@ Traffic data provided by two sensor platforms are used to train and test the est
 
 \begin{table}[!ht]
 \centering
-\begin{tabular}{|l|l|l|}
-\hline
-Road   Segment & INRIX   ID & MCS   ID \\ \hline
-South          & 1071883675 & 1159     \\ \hline
-North          & 225285973  & 1162     \\ \hline
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Road Segment} & \textbf{INRIX ID} & \textbf{MCS ID} \\
+\midrule
+South          & 1071883675 & 1159     \\
+\midrule
+North          & 225285973  & 1162     \\ 
+\bottomrule
 \end{tabular}
 \caption{INRIX ID and MCS ID for corresponding road segments.}
-\label{table:segmentIDs}
+\label{tab:segmentIDs}
 \end{table}
 
 The first three weeks of data, i.e., 1\textsuperscript{st} to 21\textsuperscript{st} October, are used as training datasets for building/training each estimation model, and the following one week of data, i.e., 22\textsuperscript{nd} to 29\textsuperscript{th} October, from both road segments are used as test datasets for evaluating the application of the models. Both platforms provide aggregated traffic measurements, timestamps, and other traffic-related information at a frequency of once every minute, and both data are delivered in \gls{csv} format. Detailed information about two data sources and the traffic information they provide is presented in the following sections.
 
 \subsection{INRIX}
 \label{subsec:inrix}
+INRIX combines data from many sources to provide traffic information. A major part of the data comes from a crowdsourced model where INRIX continuously collects speed and location from probe vehicles, combines the data into an updated view of the current traffic situation on the road, and sends it back to the vehicles. In a press release in May 2010\footnote{"INRIX’s Crowd-Sourced Traffic Network Surpasses 2 Million Vehicles", INRIX press release, May 5, 2010. <https://inrix.com/press-releases/2650/>, viewed 5 June 2020.}, INRIX said they had a network of two million GPS-enabled vehicles: \textit{“Providing a foundation of continuous real-time speed and location reports to INRIX every minute for an average of 7 hours per day, per vehicle, commercial fleets – such as taxi cabs, service delivery vans and long haul trucks – represent the majority of INRIX’s network. INRIX intelligently combines these reports with data from consumer vehicles and GPS-enabled smartphones to deliver a service that updates traffic information to drivers every minute, ensuring they have the most accurate view of traffic conditions wherever they go.”}
 
-\subsection{\gls{mcs}}
+Table~\ref{tab:inrix_schema} shows the schema and an example of data from the INRIX dataset. Data fields in bold in table~\ref{tab:inrix_schema} are the variables of interest in the project.
+
+\begin{table}[!ht]
+    \begin{tabular}{@{} m{0.15\textwidth} m{0.64\textwidth} m{0.16\textwidth} @{}}
+    \toprule
+    \textbf{Field} & \textbf{Description} & \textbf{Example} \\
+    \midrule
+    \textbf{Segment ID} & An identifier for defining a unique road segment. & \textbf{1071883675} \\ 
+    \midrule
+    \textbf{Timestamp} & The timestamp of the measurement in UTC. & \textbf{2018-10-01 00:00:12} \\
+    \midrule
+    Segment Type & Type of road segment: XD Segment (XDS) or TMC segment. & XDS \\
+    \midrule
+    \textbf{Speed} & Average speed of vehicles on the segment calculated from the most current time slice, in km/h. & \textbf{93} \\ 
+    \midrule
+    Average Speed & The historical average speed on the segment for the given day and time (km/h). & 68 \\ 
+    \midrule
+    Reference Speed & An expected free-flow speed on the segment, determined from the INRIX traffic archive (km/h). & 68 \\ 
+    \midrule
+    \textbf{Travel Time} & The time required to travel across the segment in minutes. & \textbf{0.738} \\ 
+    \midrule
+    \textbf{Score} & A measure of confidence in a given reported speed with three possible values: 10/20/30 \cite{kim_inrix_data_comparing}. Samples with confidence score larger than 10 are based on real-time data, otherwise are based on historical data. & \textbf{30} \\ 
+    \midrule
+    Cvalue & The second measure of confidence ranges from 0 to 100, which only applies when the confidence score is 30 \cite{kim_inrix_data_comparing}. & 49 \\ 
+    \midrule
+    Speed-bucket & Level of congestion according to the range of speed. & 3 \\
+    \bottomrule
+    \end{tabular}
+    \caption{The schema and example of the INRIX dataset}
+    \label{tab:inrix_schema}
+\end{table}
+
+To be noticed that the speed reported by INRIX every minute is space-mean speed calculated from the most current time slice \cite{sharma_inrix_data_opportunity}. In the thesis project, speed and/or travel time are used as main input features for estimation models. In contrast, timestamp and segment ID are used for preparing temporal and spatial factors in the feature vector for capturing time and space dependency of the traffic relationship.
+
+
+\subsection{Motorway Control System (MCS)}
 \label{subsec:mcs}
+The traffic flow in Stockholm is monitored with the \acrfull{mcs} by the Swedish transport administration (Trafikverket). Many stationary MCS-portals have been installed on the gantries on the E4 highway and other roads in Stockholm's road network. The MCS-portals are equipped with radar sensors, which monitor the traffic flow and speed in each lane of the road every minute. The data provides the regional traffic control center with information about the current traffic flow and speeds. The data is also input to a control system that sets variable speed limit signs.
+
+\begin{table}[!h]
+\begin{tabular}{@{}m{0.15\textwidth} m{0.6\textwidth} m{0.2\textwidth}@{}}
+\toprule
+\textbf{Field} & \textbf{Description} & \textbf{Example} \\
+\midrule
+Fk\_id & Reference ID identifying the location of sensor on the road. & 1159 \\ 
+\midrule
+Timestamp & The timestamp of the measurement. & 2018-10-01 00:01:00 \\ 
+\midrule
+\textbf{Speed} & Average speed of vehicles passing the sensors in the past minute, in km/h. & \textbf{93.816} \\ 
+\midrule
+\textbf{Flow} & Flow rate in veh/h, calculated from the   number of vehicles passing the sensors in the past minute. & \textbf{160} \\ \midrule
+Used Lane & The lanes contribute to the measurements in the past minutes. NULL indicates there are no vehicles on the lane. & 1,1,1,NULL \\ 
+\bottomrule
+\end{tabular}
+    \caption{The schema and example of the MCS dataset}
+    \label{tab:mcs_schema}
+\end{table}
+
+The distance between the locations of two MCS sensors in this work is 1 km. The MCS measurements are aggregated over a minute while reported by the system. MCS measurements are fixed-point measurements and hence provide time-mean speed as reported speed after aggregation. On the other hand, the probe measurements such as INRIX calculate the space-mean speed over a road segment as vehicles' reported average speed  \cite{sharma_inrix_data_opportunity}. Different measurement techniques also lead to bias and delay in INRIX data compared to stationary sensor speed \cite{sharma_inrix_data_opportunity, kim_inrix_data_comparing}. To be noticed that the MCS datasets used in this project have been further aggregated over raw sensor data from all lanes on E4 to obtain average flow and speed on the road.
+
+The schema of the MCS datasets and an example from the south segment are shown in table~\ref{tab:mcs_schema}. Data fields in bold are the variables selected and used in the project. The traffic flow in MCS datasets is used as labels for training and testing the project's estimation models. On the other hand, we use MCS speed data as a benchmarked speed for mitigating the latency exhibited by the INRIX data during the data preparation.
+
+\section{Data Preparation}
+\label{sec:dataPreparation}
+Various data exploration and preparation techniques are adopted to prepare the datasets, including feature vectors and labels, to train and test the estimation models. Techniques such as plotting and statistical measures, e.g., correlation coefficient, are used in the explorative analysis to get insights into the datasets and evaluate the effect of data preparation on the variables. Regarding data preparation, the following techniques of feature engineering for machine learning are adopted for preparing the datasets:
+
+\begin{itemize}
+    \item Filtering: The INRIX datasets contain data points with a low confidence score (10), which always report the same speed value equals the historical reference speed, and thus cannot reflect the real-time traffic condition on the road segment. We filter out these data points in INRIX datasets to ensure the traffic variable values represent the traffic condition at the moment of measuring.
+    \item Smoothing: The measurements of traffic variables, i.e., flow, speed, are noisy in INRIX and MCS datasets. We need to remove noise and expose the variable values that signify the real trends to increase the models' estimation accuracy. Moving average with a window width of 30 time-steps is adopted for smoothing the speed, flow, and travel time.
+    \item Shifting: A 6-minute latency of speed is observed in INRIX datasets compared with the MCS speed. This lag-time is within the latency range, from 6 to 8 min, reported by various studies \cite{kim_inrix_data_comparing}. We eliminate the latency by shifting the INRIX time-series by 360 s to ensure the measurements from both types of datasets reflect the same traffic condition in the same timestamp. Besides, INRIX and MCS's timestamps were registered in different time-zones, requiring time-series shifting to match the timestamps from two platforms beforehand.
+    \item One-hot Encoding: One-hot encoding \cite{geron_handson_ml} is adopted to convert INRIX's timestamps and segment IDs into time-related features and space-related with a numerical form for ANN models. We prepare two time-related features and one space-related feature to help estimation model extracting time and space-dependent traffic relationships:
+    
+    \textbf{hour feature}: the hour "part" in the timestamp is converted into a 24-bit one-hot code, which represents the hour of observation in a day.
+    
+    \textbf{day feature}: the "day" part in the timestamp is converted into a 2-bit one-hot code, representing the day of observation in a week, i.e., on weekdays or weekends.
+    
+    \textbf{location feature}: the "segment ID" is converted into a 2-bit one-hot code, representing the location of the observation on the E4, i.e., on the south or north segment.
+    
+    Table 3.5 shows an example of one-hot encoding time and space features for an INRIX data point measured at 20:00 Wednesday on the south segment, together with its original timestamp and segment ID.
+
+\begin{table}[!ht]
+\begin{tabular}{@{}|l|l|l|l|@{}}
+\toprule
+\multirow{2}{*}{\textbf{Timestamp, Segment ID}} & \multicolumn{3}{l|}{\textbf{One-hot Encoding Features}} \\ 
+\cmidrule(l){2-4} 
+& hour feature: {[}00, 01, …, 23{]} & day feature: {[}weekday, weekend{]} & location feature: {[}south, north{]} \\ 
+\midrule
+2018-10-03 20:21:00, 1071883675 & {[}0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0{]} & {[}1, 0{]} & {[}1, 0{]} \\ 
+\bottomrule
+\end{tabular}
+\end{table}
+    
+    \item Feature Scaling: A machine learning model's input attributes need to be on the same scale for the machine learning algorithm to perform well. Two methods are commonly used to scale the input attributes, i.e., normalization and standardization. We adopt standardization to scale the numerical attributes for neural networks, i.e., speed and travel time, because it is less affected by the outliers in datasets than the normalization. Standardization first subtracts the mean value of the dataset from the feature values, then divides them by the standard deviation, as shown in equation~\ref{eq:standardization}. The standardized input attribute has a zero mean and a unit deviation in its distribution.
+    
+    \begin{equation}
+        {x}'=\frac{x-\bar{x}}{\sigma}
+        \label{eq:standardization}
+    \end{equation}
+    
+    \begin{displaymath}
+    
+    \end{displaymath}
+\end{itemize}
+
 
 \clearpage
 There are xxx characteristics that distinguish yyy from other information and communication technology (ICT) system, as shown in Figure~\ref{fig:lotsofstars}. Table \ref{tab:tablecaracteristics} summarizes these characteristics.
