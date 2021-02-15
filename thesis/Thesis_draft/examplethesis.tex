@@ -99,6 +99,8 @@
 \usepackage{array}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{array}
   
   
 % document (body) begins
@@ -656,18 +658,22 @@ Various data exploration and preparation techniques are adopted to prepare the d
     
     \textbf{location feature}: the "segment ID" is converted into a 2-bit one-hot code, representing the location of the observation on the E4, i.e., on the south or north segment.
     
-    Table 3.5 shows an example of one-hot encoding time and space features for an INRIX data point measured at 20:00 Wednesday on the south segment, together with its original timestamp and segment ID.
+    Table~\ref{tab:oneHot} shows an example of one-hot encoding time and space features for an INRIX data point measured at 20:00 Wednesday on the south segment, together with its original timestamp and segment ID.
 
-\begin{table}[!ht]
-\begin{tabular}{@{}|l|l|l|l|@{}}
+\begin{table}[]
+\begin{tabular}{@{} m{0.15\textwidth} m{0.3\textwidth} m{0.5\textwidth}@{}}
 \toprule
-\multirow{2}{*}{\textbf{Timestamp, Segment ID}} & \multicolumn{3}{l|}{\textbf{One-hot Encoding Features}} \\ 
-\cmidrule(l){2-4} 
-& hour feature: {[}00, 01, …, 23{]} & day feature: {[}weekday, weekend{]} & location feature: {[}south, north{]} \\ 
+\multicolumn{2}{l}{Timestamp, Segment ID} & 2018-10-03 20:21:00, 1071883675 \\ 
 \midrule
-2018-10-03 20:21:00, 1071883675 & {[}0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0{]} & {[}1, 0{]} & {[}1, 0{]} \\ 
+\multirow{3}{4em}{One-hot Encoding} & hour feature {[}00, 01, …, 23{]} & {[}0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0{]} \\ 
+\cmidrule(l){2-3} 
+& day feature {[}weekday, weekend{]} & {[}1, 0{]} \\ 
+\cmidrule(l){2-3} 
+& location feature {[}south, north{]} & {[}1, 0{]} \\ 
 \bottomrule
 \end{tabular}
+\caption{Example of one-hot encoding features for temporal and spatial factors.}
+\label{tab:oneHot}
 \end{table}
     
     \item Feature Scaling: A machine learning model's input attributes need to be on the same scale for the machine learning algorithm to perform well. Two methods are commonly used to scale the input attributes, i.e., normalization and standardization. We adopt standardization to scale the numerical attributes for neural networks, i.e., speed and travel time, because it is less affected by the outliers in datasets than the normalization. Standardization first subtracts the mean value of the dataset from the feature values, then divides them by the standard deviation, as shown in equation~\ref{eq:standardization}. The standardized input attribute has a zero mean and a unit deviation in its distribution.
@@ -676,125 +682,137 @@ Various data exploration and preparation techniques are adopted to prepare the d
         {x}'=\frac{x-\bar{x}}{\sigma}
         \label{eq:standardization}
     \end{equation}
-    
-    \begin{displaymath}
-    
-    \end{displaymath}
+    \begin{align*}
+    & {x}'=the \ standardized \ input \ feature \quad x=the \ original \ feature \\
+    & \bar{x} = the \ mean \ of \ the \ feature \ values\\
+    & \sigma = the \ standard \ deviation \ of \ the \ feature \ values
+    \end{align*}
 \end{itemize}
 
+\section{Model Training}
+\label{sec:modelTraining}
+Our goal is to develop an approach that automatically finds relationships between observed variables in INRIX data and the flow in MCS data, which can later be used for estimating un-observed flow from the INRIX data collected in the future and the neighboring area. These relationships are the flow estimation models which we are going to train and test using prepared datasets. Two types of models are trained in this work: a multi-regime baseline model and ANN models. The multi-regime baseline model acts as a benchmark for comparison with the ANN models proposed, while ANN models are built for the purposes listed in section~\ref{sec:goalAndPurposes}. Two types of models are trained in this work: a multi-regime baseline model and ANN models.
+
+\subsection{Baseline Model}
+\label{subsec:baselineModel}
+Multi-regime models are widely used for modeling the relationships of traffic variables \cite{tsanakas_emission_estimation, blandin_individual_speed, antoniou_ml_estimation, nielsen_flow-speed_relations}, which use different functional forms for modeling the relationships in different traffic regimes in FDs, e.g., free-flow and congested regime. Univariate linear regression is often used to characterize the linear relationships between flow and speed in the free-flow regime \cite{blandin_individual_speed, nielsen_flow-speed_relations}. For the congested regime, curved relationships between flow and speed are often observed, and the functional form derived from the linear relationship between flow and density is often used to characterize the relationship \cite{blandin_individual_speed, nielsen_flow-speed_relations}.
+
+\begin{equation}
+    \hat{q} = 
+    \left \{\begin{matrix}
+    av + b & if \ v > v_c\\ 
+    cv^2 + dv + e & otherwise
+    \end{matrix}\right.
+    \label{eq:baseline}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated flow \quad v = speed \quad v_c=critical \ speed \\
+    & a,b,c,d,e=model \ parameters
+\end{align*}
+
+We train a multi-regime model on the training dataset of south segment as our baseline model for later comparison with more sophisticated ANN models. The mathematical expression for the baseline model is shown in equation~\ref{eq:baseline}. All sample speeds higher than or equal to the critical speed, 70km, are categorized as free-flow and are regressed onto flows using linear regression. The samples with speed lower than the critical speed are categorized into the congested regime, and their flow is modeled as a second-degree polynomial in speed. The critical speed is manually determined from the flow-density diagram. The density is derived from the MCS flow and INRIX speed using the traffic variable relation in equation~\ref{eq:basic_traffic_variable_relation} \cite{blandin_individual_speed, nielsen_flow-speed_relations}. The degree of the polynomial regression is determined by the hyperparameter tuning using 10-fold cross-validation.
+
+\subsection{Neural Network Models}
+The project aims to develop model structures that produce accurate flow estimation results from INRIX data by utilizing the neural network's ability to learn and model high-dimensional and non-linear relationships. We construct five neural network models to evaluate the neural network's performance in modeling classic flow-speed relationship, the relationship between traffic flow and multiple input features, and time-space-dependent relationships using prepared datasets.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.65\textwidth]{temporal_ann_structure.png}
+    \caption{Structure of the neural network considering temporal dependencies.}
+    \label{fig:temporal_ann_structure}
+\end{figure}
+
+All proposed neural networks are based on an architecture called "Wide \& Deep Learning," introduced in a 2016 paper \cite{cheng_w&d_learning}. The architecture enables ANN to learn both deep patterns through deep neural network layers and simple patterns in data by connecting the inputs directly to the output layer \cite{geron_handson_ml, cheng_w&d_learning}. Each neural network consists of six layers: one input layer, three hidden layers, one concatenate layer and one output layer. The first layer is an input layer with dimension n equals to the number of input features. For example, if the model's independent variables are speed and travel time, n equals two. The input layer is followed by three densely connected hidden layers containing 120, 60, and 30 neuron nodes, respectively. The number of neuron units in each hidden layer is determined by hyperparameter tuning. The first and third dense hidden layer outputs are fed into a concatenate layer, which merges the outputs of two layers and feeds the concatenation to the output layer. The purpose of the concatenate layer is to provide a short path to the model, through which it can learn simple and undistorted patterns from the layer closer to the input features. The last layer of the model is an output layer, which densely connects its inputs and produces a predicted value of traffic flow on the road segment as the entire estimator's output. The dimension of the output layer is one for all neural network models. Figure~\ref{fig:temporal_ann_structure} shows the structure of one of the proposed ANN models with 27 input features, including speed, hour, and day features, which are listed in table~\ref{tab:oneHot}.
+
+"None" in input and output shapes in figure~\ref{fig:temporal_ann_structure} means the number of samples in the data batch is not fixed but flexible for different datasets. We use MSE as the cost function and Adam algorithm, an extension of gradient descent algorithm, as our optimization algorithm for training the neural networks. More details about each neural network and its corresponding purpose are presented as follows.
+
+\subsubsection{Univariate Neural Network}
+\label{subsubsec:univariateNeuralNetwork}
+The ANN model characterizes the simple flow-speed relation with a single independent variable, speed. The mathematical representation of the estimation model is shown as equation~\ref{eq:ann_spd}.
+
+
+The purpose of this univariate neural network is to evaluate ANN's ability to learn and model the stationary flow-speed relationship from the data compared with the traditional baseline model. The model is trained on the INRIX speed and MCS flow in training datasets collected from the south road segment from 1\textsuperscript{st} to 21\textsuperscript{st} October. In order to evaluate the model's estimation accuracy and its generality for the adjacent road segment, we test the model on the test datasets, as mentioned in section~\ref{sec:datasets}, collected from both the south and north segments in the following week.
+
+\begin{equation}
+    \hat{q} = E(v)
+    \label{eq:ann_spd}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated \ flow \quad v=speed
+\end{align*}
+
+\subsubsection{Multivariate Neural Network}
+\label{subsubsec:multivariateNeuralNetwork}
+We incorporate travel time, another real-time information of road traffic provided by INRIX, as an additional feature for flow estimation. The multivariate neural network with two input features, speed and travel time, is constructed to evaluate ANN's ability to capture non-linear relationships between multiple traffic variables, which is a more complicated task when only using linear regression. Moreover, the model is used to evaluate whether the travel time is a useful feature that can provide additional information than speed to improve the estimation accuracy. 
+
+\begin{equation}
+    \hat{q} = E(v,tt)
+    \label{eq:ann_spd_tt}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated \ flow \quad v=speed \quad tt = travel \ time
+\end{align*}
+
+\subsubsection{Neural Network with Temporal Dependency}
+\label{subsubsec:temporalNeuralNetwork}
+A neural network that considers the temporal dependency of the flow-speed relationship is constructed. The neural network incorporates time-related features, i.e., hour and day features introduced in section~\ref{sec:dataPreparation}, as its inputs to capture the dynamic flow-speed relationship, which changes with different hours in a day and different days in a week. The structure of this neural network was already shown in figure~\ref{fig:temporal_ann_structure}, and the mathematical representation of the model is shown as equation~\ref{eq:temporal_ann_spd}. To be noticed that the hour feature is a 24-bit one-hot encoding representing each hour in a day, and the day feature is a 2-bit one-hot encoding representing weekday or weekend. Therefore, the model has an input vector with a dimension of 27. The model is also trained on south segment data and tested on data from both road segments in the following week.
+\begin{equation}
+    \hat{q} = E(v,h,d)
+    \label{eq:temporal_ann_spd}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated \ flow \quad v=speed \quad h=hour \ in \ a \ day \\ & d=day \ in \ a \ week \ (weekday \ or \ weekend)
+\end{align*}
+
+\subsubsection{Multivariate Neural Network with Temporal Dependency}
+\label{subsubsec:temporalMultivariateNeuralNetwork}
+Like the multivariate ANN, this neural network incorporates travel time in addition to the speed as the second input feature. The difference is that this ANN also considers the temporal dependency of traffic conditions by incorporating the time features, i.e., hour and day.
+
+The purpose of this model is to examine whether the travel time as an additional independent variable can improve the estimation accuracy when the model also captures the transitions of the traffic conditions over time.
+\begin{equation}
+    \hat{q} = E(v, tt, h,d)
+    \label{eq:temporal_ann_spd_tt}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated \ flow \quad v=speed \quad  tt=travel time \\
+    & h=hour \ in \ a \ day \quad d=day \ in \ a \ week \ (weekday \ or \ weekend)
+\end{align*}
+
+\subsubsection{Neural Network with Spatiotemporal Dependency}
+\label{subsubsec:spatiotemporalNeuralNetwork}
+Finally, we construct a neural network considering both temporal and spatial dependencies when modeling the flow-speed relationship. The model is trained on data from both road segments, i.e., south and north, with time-related input features, i.e., hour and day, and a 2-bit location feature that identifies the road segments. Same as other models, the model is tested on the data collected from both road segments in the following week.
+In general, the flow-speed relationship varies with time and locations in a road network \cite{blandin_individual_speed}. The purpose of this neural network is to evaluate ANN's ability to learn complex spatial and temporal dependencies of relationships between traffic variables for multiple road segments. The model shows the possibility of building a central estimation model that can learn the spatiotemporal dependencies in the entire road network and estimate the traffic flow for road segments between fixed sensors using ANN, reducing the number of models needed.
+
+\begin{equation}
+    \hat{q} = E(v,h,d,l)  
+    \label{eq:spatiotemporal_ann_spd}
+\end{equation}
+\begin{align*}
+    & \hat{q} = estimated \ flow \quad v=speed \quad\\
+    & h=hour \ in \ a \ day \quad d=day \ in \ a \ week \ (weekday \ or \ weekend)\\
+    & l=location \ (south \ or \ north)
+\end{align*}
+
+\section{Performance Evaluation}
+\label{sec:performanceEvaluation}
+
+In this work, the \acrfull{rmse} and the \acrfull{mape} are used to evaluate the trained estimation models' accuracy when applied to the test datasets. Both RMSE and MAPE are popular evaluation metrics for traffic predictors and estimators \cite{anuar_flow_probe, Bulteau_flow_higher-order, wilby_flow_estimation_xfcd}.
+
+\begin{equation}
+    RMSE = \sqrt[2]{\frac{\sum_{i=1}^{m}(\hat{y}^i - y^i)^{2}}{m}}
+    \label{eq:rmse}
+\end{equation}
+\begin{equation}
+    MAPE = \frac{1}{m}\sum_{i=1}^{m}\left | \frac{y^i - \hat{y}^i}{y^i} \right |
+    \label{eq:mape}
+\end{equation}
+
+In equation~\ref{eq:rmse} and \ref{eq:mape}, $y^i$ and $\hat{y}^i$ is the observed value and estimated value of the i\textsuperscript{th} sample, respectively, and m is the number of the samples. RMSE measures the differences between values predicted by an estimator and the actual value, i.e., the prediction errors, and computes the square root of the average of squared errors. RMSE is also a straightforward measure that has the same unit as the predicted variable. On the other hand, MAPE expresses the accuracy as a “percentage error” by computing the average of absolute ratios of prediction error to the actual value. The MAPE in the project is presented in percentage after multiplying by 100\%.
+
+\chapter{Results and Discussions }
+\label{ch:resultsAndDiscussions}
 
 \clearpage
-There are xxx characteristics that distinguish yyy from other information and communication technology (ICT) system, as shown in Figure~\ref{fig:lotsofstars}. Table \ref{tab:tablecaracteristics} summarizes these characteristics.
-
-\begin{figure}[!ht]
-  \begin{center}
-    \includegraphics[width=0.5\textwidth]{lots_of_stars.png}
-  \end{center}
-  \caption{Lots of stars  (Inspired by Figure x.y on page z of [xxx])}
-  \label{fig:lotsofstars}
-\end{figure}
-
-
-\begin{table}[!ht]
-  \begin{center}
-    \caption{xxx characteristics}
-    \label{tab:tablecaracteristics}
-    \begin{tabular}{l|S[table-format=4.6]} % <-- Alignments: 1st column left, 2nd middle, with vertical lines in between
-      \textbf{Characteristics} & \textbf{Description}\\
-      $\alpha$ & $\beta$ \\
-      \hline
-      1 & 1110.1\\
-      2 & 10.1\\
-      3 & 23.113231\\
-    \end{tabular}
-  \end{center}
-\end{table}
-
-
-
-See Figure~\ref{fig:ieee8023-data-packet} which uses the \textsf{bytefield}  \LaTeX\ package. 
-
-
-\begin{figure}[!ht]
-	\centering
-\begin{bytefield}{21}
-\bitbox[]{7}{} & \bitbox[]{3}{\tiny octets:} & \bitbox[]{4}{\tiny 6} & \bitbox[]{4}{\tiny 6} & \bitbox[]{3}{\tiny 2} & \bitbox[]{5}{\tiny 46 to 1500} & \bitbox[]{3}{\tiny 0 to 46} & \bitbox[]{2}{\tiny 4}\\ 
-
-\bitbox[]{8}{\textbf{ETHERNET \\[-1ex] \tiny{data link-layer}}} & \bitbox[]{2}{} & 
-
-\bitbox{4}{\tiny Destination Address} & \bitbox{4}{\tiny Source Address} & \bitbox{3}{\tiny Length/ Type} & 
-\bitbox{5}{\tiny Data Payload} & \bitbox{3}{\tiny Padding} &
-\bitbox{2}{\tiny CRC} \\
-
-\bitbox[]{1}{} &\bitbox[]{3}{\tiny octets:} & \bitbox[]{4}{\tiny 7} & \bitbox[]{2}{\tiny 1} & \bitbox[]{0}{$\vdots$ \\[1ex]} & \bitbox[]{16}{} & \bitbox[]{0}{$\vdots$ \\[1ex]} & \bitbox[]{5}{} & \bitbox[]{4}{\tiny Variable}\\
-
-\bitbox[]{4}{\textbf{MAC \\[-1ex] \tiny{packet}}} & \colorbitbox{lightgrey}{4}{\tiny Preamble} & \colorbitbox{lightgrey}{2}{\tiny SFD} & \colorbitbox{lightgrey}{16}{\tiny MAC Client Data} & \colorbitbox{lightgrey}{3}{\tiny Padding} &
-\colorbitbox{lightgrey}{2}{\tiny CRC} & \colorbitbox{lightgrey}{4}{\tiny Extension}
-\end{bytefield}
-     \label{fig:ieee8023-data-packet}
-     \caption{Ethernet data link layer protocol encapsulated into a IEEE~802.3 MAC packet}
-\end{figure}
-
-The data link layer will receive a packet from the IP layer. The layout of
-an IPv4 packet is shown in Figure~\ref{fig:ipv4-header}. This should be
-contrasted with the IPv6 header shown in Figure~\ref{fig:ipv6-header}.
-
-%
-% IPv4 packet header
-%
-\begin{figure}[!ht]
-	\centering
-\begin{bytefield}{32}
-\bitheader{0-31} \\
-\bitbox{4}{\footnotesize{Version}} & \bitbox{4}{IHL} & \bitbox{6}{\tiny{Type of Service}} & \bitbox{2}{{\scriptsize ECN}} \bitbox{16}{Total Length}\\
-\bitbox{16}{Identification} & \bitbox{3}{Flags} & \bitbox{13}{Fragment Offset}\\
-\bitbox{8}{Time to Live} & \bitbox{8}{Protocol} & \bitbox{16}{Header Checksum}\\
-\wordbox{1}{Source Address}\\
-\wordbox{1}{Destination Address}\\
-\colorbitbox{lightgrey}{24}{Options} & \colorbitbox{lightgrey}{8}{Padding}
-\end{bytefield}
-     \label{fig:ipv4-header} 
-     \caption[IPv4 datagram header]{IPv4 datagram header. Light grey coloured fields are optional.}
-\end{figure}
-
-%
-% IPv6 packet header
-%
-\begin{figure}[!ht]
-	\centering
-\begin{bytefield}{32}
-\bitheader{0-31} \\
-\bitbox{4}{\footnotesize{Version}} & \bitbox{8}{Traffic Class} & \bitbox{20}{Flow Label}\\
-\bitbox{16}{Payload Length} & \bitbox{8}{Next Header} & \bitbox{8}{Hop Limit}\\
-\wordbox{4}{Source Address}\\
-\wordbox{4}{Destination Address}\\
-\end{bytefield}
-     \label{fig:ipv6-header}
-     \caption{IPv6 datagram header}
-\end{figure}
-
-...
-
-\section{Major background area 2}
-
-\section{Related work area}\todo[inline, backgroundcolor=aqua]{Relaterande arbeten}
-
-
-\subsection{Major related work 1}\todo[inline, backgroundcolor=aqua]{Relaterande arbeten 1}
-Carrier clouds have been suggested as a way to reduce the delay between the users and the cloud server that is providing them with content. However, there is a question of how to find the available resources in such a carrier cloud. One approach has been to disseminate resource information using an extension to OSPF-TE, see Roozbeh, Sefidcon, and Maguire \cite{roozbeh_resource_2013}.
-
-
-\subsection{Major related work}\todo[inline, backgroundcolor=aqua]{Relaterande arbeten}
-
-\subsection{Minor related work 1}\todo[inline, backgroundcolor=aqua]{Mindre relaterat arbete 1}
-
-
-…
-\subsection{Minor related work n}\todo[inline, backgroundcolor=aqua]{Mindre relaterat arbete n}
-
-
-\cleardoublepage
-
 
 % Chapter 3 Methodology
 \chapter{Methodology}
