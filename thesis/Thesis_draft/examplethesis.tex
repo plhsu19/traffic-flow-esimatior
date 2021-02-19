@@ -124,13 +124,13 @@
 
 
 \supervisor{Ian Marsh, Xiaoliang Ma}
-\examiner{Erik Jenelius}
+\examiner{Erik Jenelius, Viktoria Fodor}
 \hostcompany{RISE SICS AB} % Remove this line if the project was not done at a host company
 %\hostorganization{CERN}   % if there was a host organization
 
 \date{\today}
 
-\programcode{TIVNM}
+% \programcode{TIVNM}
 %% Alternatively, you can say \programme{Civilingenjör Datateknik} to directly set the programme string
 
 \schoolAcronym{EECS}
@@ -811,6 +811,32 @@ In equation~\ref{eq:rmse} and \ref{eq:mape}, $y^i$ and $\hat{y}^i$ is the observ
 
 \chapter{Results and Discussions }
 \label{ch:resultsAndDiscussions}
+This chapter presents the results of implementation and the validation of estimation models introduced in chapter~\ref{ch:methodologyAndDatasets}. The first three sections of this chapter describe the results of data preparation, model training, and validation of the estimation models. We then discuss the results in the last section.
+
+\section{Data Preparation Results}
+\label{sec:resultsDataPreparation}
+Figure~\ref{fig:smoothing} shows the time-series INRIX speed and MCS flow in 1\textsuperscript{st} October, from the south segment, before and after the moving average smoothing with a window width of 30 minutes. Smoothing removes noises in the data and exposes the underlying trends of the traffic state variables over time. Smoothing also makes it easier for the estimation model to capture the relationships between flow and speed from the noisy INRIX and MCS data.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{smoothing_inrix_speed.png}
+        \caption{INRIX speed versus time (epoch) before and after smoothing.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{smoothing_mcs_flow.png}
+        \caption{MCS flow versus time (epoch) before and after smoothing.}
+    \end{subfigure}
+    \caption{Time-series INRIX speed and MCS flow before and after smoothing on 1\textsuperscript{st} October.}
+    \label{fig:smoothing}
+\end{figure}
+
+Figure shifting a. presents the INRIX speed and MCS speed versus epoch, i.e., cumulative time, based on their original timestamps. We can observe an approximate 6-minute latency of INRIX speed compared with the MCS speed, which is a common phenomenon reported by various studies related to the INRIX data [opportunity][KIM]. Since we aim to develop the relationship models that mapping the INRIX variables to the MCS flow and then use the models to estimate the traffic flow, we do not want any time difference between INRIX and MCS's variable observations. Therefore we shift the INRIX timestamps by 360 s to remove the time-lag between two measurements. Figure shifting b. presents the time-series INRIX and MCS speed after the timestamp shifting. We can see that the time-lag is disappeared, and the two curves overlap better after the shifting. By removing the latency, we ensure that both sensor platforms' measurements with the same timestamp reflect the same traffic condition at that moment.
+
+
 
 \clearpage
 
