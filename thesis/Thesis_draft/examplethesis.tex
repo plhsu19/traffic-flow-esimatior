@@ -834,9 +834,39 @@ Figure~\ref{fig:smoothing} shows the time-series INRIX speed and MCS flow in 1\t
     \label{fig:smoothing}
 \end{figure}
 
-Figure shifting a. presents the INRIX speed and MCS speed versus epoch, i.e., cumulative time, based on their original timestamps. We can observe an approximate 6-minute latency of INRIX speed compared with the MCS speed, which is a common phenomenon reported by various studies related to the INRIX data [opportunity][KIM]. Since we aim to develop the relationship models that mapping the INRIX variables to the MCS flow and then use the models to estimate the traffic flow, we do not want any time difference between INRIX and MCS's variable observations. Therefore we shift the INRIX timestamps by 360 s to remove the time-lag between two measurements. Figure shifting b. presents the time-series INRIX and MCS speed after the timestamp shifting. We can see that the time-lag is disappeared, and the two curves overlap better after the shifting. By removing the latency, we ensure that both sensor platforms' measurements with the same timestamp reflect the same traffic condition at that moment.
+Figure~\ref{subfig:before_shifting} presents the INRIX speed and MCS speed versus epoch, i.e., cumulative time, based on their original timestamps. We can observe an approximate 6-minute latency of INRIX speed compared with the MCS speed from the figure, which is a common phenomenon reported by various studies related to the INRIX data [opportunity][KIM]. Since we aim to develop the relationship models that mapping the INRIX variables to the MCS flow and then use the models to estimate the traffic flow, we do not want any time difference between INRIX and MCS's observations. Therefore we shift the INRIX timestamps by 360 s to remove the time-lag between two measurements. Figure~\ref{subfig:after_shifting} presents the time-series INRIX and MCS speed after the timestamp shifting. We can see that the time-lag is disappeared, and the two curves overlap better after the shifting. By removing the latency, we ensure that both sensor platforms' measurements with the same timestamp reflect the same traffic condition at that moment.
 
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{before_shifting.png}
+        \caption{INRIX and MCS speed versus time based on original timestamps.}
+        \label{subfig:before_shifting}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{after_shifting.png}
+        \caption{INRIX and MCS speed versus time after shifting INRIX timestamps with 360 s to remove the time-lag.}
+        \label{subfig:after_shifting}
+    \end{subfigure}
+    \caption{INRIX and MCS speed versus time (epoch) before and after shifting INRIX timestamps on 1\textsuperscript{st} October.}
+    \label{fig:shifting}
+\end{figure}
 
+Figure~\ref{fig:standardization_boxplots} presents box-plots showing the distributions of speed in the training and test datasets collected on both road segments before and after feature scaling, i.e., standardization. From figure~\ref{fig:standardization_boxplots}, we can see that the north segment's median speeds before the standardization are approximately 3 km slower than median speeds on the south segment, whether in the training sets or test sets. One reason for the lower median speed on the north road segment is that the north segment, compared with the south segment, is closer to Stockholm's city center, which generally has lower speed limits and more traffic than the city's outer parts. The interquartile ranges of the speed values are similar on both road segments. Figure ~\ref{fig:standardization_boxplots} also shows the distributions of standardized speeds in each dataset. We can see that the median values and the interquartile ranges on both road segments are similar. As standardization subtracts the mean value from the original speed value, the standardized speeds have a zero mean. Thus the difference of median speed between the north and south segments is reduced. 
+
+On the other hand, the distribution of speed in the test set is similar to the distribution in training set on the same segment, which means that the speed behavior did not change much in the short term future of one week.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\textwidth]{standardization_boxplots.png}
+    \caption{Distributions of INRIX speed in training and test datasets before and after the standardization.}
+    \label{fig:standardization_boxplots}
+\end{figure}
+
+\section{Model Training Results}
 
 \clearpage
 
