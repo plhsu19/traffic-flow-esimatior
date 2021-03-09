@@ -8,7 +8,7 @@
 %% text. Original body text is deliberately left in English.
 
 
-%% set the default language to english or swedish by passing an option to the documentclass - this handles the inside tile page
+%% set the default language to English or Swedish by passing an option to the documentclass - this handles the inside tile page
 \documentclass[english]{kththesis}
 
 % \usepackage[style=numeric,sorting=none,backend=biber]{biblatex}
@@ -124,7 +124,7 @@
 
 
 \supervisor{Ian Marsh, Xiaoliang Ma}
-\examiner{Erik Jenelius, Viktoria Fodor}
+\examiner{}
 \hostcompany{RISE SICS AB} % Remove this line if the project was not done at a host company
 %\hostorganization{CERN}   % if there was a host organization
 
@@ -326,7 +326,7 @@ The approach proposed in this work is trained and tested using both stationary a
 \section{Background}
 \label{sec:background}
 \renewcommand{\thefootnote}{\arabic{footnote}}
-The thesis project is a part of the TENS-project, an ongoing research project at \gls{rise} SICS. All the datasets for this work were used with RISE permission for research purposes in the TENS-project\footnote{www.tens-project.info}. The TENS project's goal is network-wide monitoring of road traffic-induced energy consumption and vehicular emission based on alternative traffic sensor data. To precisely calculate the vehicular emission and energy consumption, comprehensive information of traffic state variables, i.e., speed and flow, in a road network's spatiotemporal domain is necessary.
+The thesis project is a part of the TENS-project, an ongoing research project at \gls{rise}. All the datasets for this work were used with RISE permission for research purposes in the TENS-project\footnote{www.tens-project.info}. The TENS project's goal is network-wide monitoring of road traffic-induced energy consumption and vehicular emission based on alternative traffic sensor data. To precisely calculate the vehicular emission and energy consumption, comprehensive information of traffic state variables, i.e., speed and flow, in a road network's spatiotemporal domain is necessary.
 
 \section{Problem}
 
@@ -334,7 +334,7 @@ The thesis project is a part of the TENS-project, an ongoing research project at
 As mentioned in the previous sections, the thesis project aims to develop an automated approach for estimating traffic flow based on new traffic sensor data, i.e., mobile data, to provide traffic state information on highways with a high spatiotemporal resolution. Although researchers have proposed various approaches for this purpose, many of them modeled the stationary relationships between flow and a traffic variable, e.g., speed, then used these relationships to estimate the traffic flow based on that traffic variable's measures from mobile data. One problem with these classic approaches is that traffic relationships are dynamic, which may vary depending on many factors, e.g., time and space. Failed to consider these factors may lead to estimation results with low accuracy. Moreover, those approaches usually require manual efforts by human experts, e.g., mathematical form selection, parameter calibration, and traffic regime identification, to build the estimation models, which means they are not automatic and will not be scalable solutions for flow estimation in networks with a large number of road segments and sensors. Finally, the existing \gls{tse} approaches cannot incorporate multiple data sources and effectively utilizing them to improve accuracy by modeling the complex relationships between them. Therefore, some main questions posed in this thesis project are:
 \begin{enumerate}
     \item Is it possible to develop a flow estimation model with improved accuracy by better modeling the traffic relationship between flow and speed? Can we improve the accuracy by considering the temporal and spatial dependencies in the relationship?
-    \item Is it possible to implement a highly automated approach that builds the models automatically and iteratively for traffic flow estimation in highway networks?
+    \item Is it possible to implement a highly automated approach that builds the models automatically and iteravely for traffic flow estimation in highway networks?
     \item Can we develop an approach that allows for easy incorporation of additional information from multiple available data sources into flow estimation? Will the additional information help improve the estimation accuracy?
 \end{enumerate}
 
@@ -342,7 +342,7 @@ As mentioned in the previous sections, the thesis project aims to develop an aut
 \label{sec:goalAndPurposes}
 The thesis's goal is to develop an automated approach for estimating the traffic state in a highway system with high spatiotemporal resolution using mobile data accurately and efficiently. The approach could be used to build an intelligent transportation system capable of network-wide emission monitoring or traffic control. \gls{ann} is a data-driven \gls{ml} method that is powerful to learn highly nonlinear relationships in high-dimensional data \cite{ma_lstm_predict}, which is believed to be suitable for modeling complex temporal and spatial relationships lying in transportation datasets \cite{vlahogianni_forecast_overview}. Therefore, the project's primary purpose is to explore the potentials of \glspl{ann}, a data-driven technique, for traffic flow estimation and evaluate their accuracy, i.e., estimation error, by comparing them with the classic multi-regime regression model. More specifically, the thesis project implements various \gls{ann}-based flow estimation models and evaluating their performance on the training highway segment and its neighboring road segment for the following minor purposes:
 \begin{enumerate}
-    \item Implement a univariate model to answer whether \gls{ann} can better model the stationary flow-speed relationship than the classic multi-regime model.
+    \item Implement a uni-variate model to answer whether \gls{ann} can better model the stationary flow-speed relationship than the classic multi-regime model.
     \item Implement multivariate \gls{ann} models to answer whether incorporating an additional traffic variable from mobile data, e.g., travel time, could help improve the estimation accuracy.
     \item Implement time-dependent models to answer whether \gls{ann} can capture time-varying flow-speed relationships.
     \item Implement a time-space-dependent model to answer whether \gls{ann} can capture the complex spatiotemporal dependency of the traffic relationships lying in the datasets with sensor data from multiple road segments.
@@ -867,8 +867,78 @@ On the other hand, the distribution of speed in the test set is similar to the d
 \end{figure}
 
 \section{Model Training Results}
+\label{sec:modelTrainingResults}
+
+% baseline vs ANN flow-speed relationship
+
+Figure~\ref{fig:base_ann_training} shows the baseline and the ANN flow-speed relationship trained on the samples from the south segment's training set. The samples used for training are also presented in the figure for comparison with the relationships.  To be noticed that the threshold speed separating the free-flow from the saturated regime for the baseline relationship in figure~\ref{fig:base_ann_training} is 70 km/h. The threshold speed was determined from the flow-density diagram using a regime identification method from \cite{nielsen_flow-speed_relations}. The density values were inferred from the flow and speed values using the equation~\ref{eq:basic_traffic_variable_relation}. Training errors for both models are shown in the table~\ref{tab:training_errors}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.7\textwidth]{baseline_ann_training.png}
+    \caption{Baseline versus univariate ANN flow-speed relationship.}
+    \label{fig:base_ann_training}
+\end{figure}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Training Error} & \textbf{Baseline Model} & \textbf{ANN Model} \\
+\midrule
+MAPE          & 96.49\% & 87.61\%    \\
+\midrule
+RMSE          & 385.23  & 372.61     \\ 
+\bottomrule
+\end{tabular}
+\caption{Training errors for baseline and ANN flow-speed relationship model.}
+\label{tab:training_errors}
+\end{table}
+
+Generally speaking, the ANN flow-speed relationship fits the training samples better than the baseline model, especially in the free-flow regime. From figure~\ref{fig:base_ann_training}, we can see that the baseline model uses linear regression to fit the samples in the free-flow regime, which is a common method for fitting the flow-speed relationship in free-flow regime \cite{blandin_individual_speed, nielsen_flow-speed_relations}. However, the flow-speed relationship in the free-flow regime is more S-shaped than linear in our dataset. ANN as a non-parametric model without fixed functional forms can adapt itself to the data and better fit the S-shaped flow-speed relationship in the free-flow regime. The ANN also has an advantage in the high-speed region, i.e., speed is larger than 90 km/h, where the traffic flow is low and barely changes with the speed.
+
+% training results and temporal features for temporal ANN
 
 \clearpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 % Chapter 3 Methodology
 \chapter{Methodology}
