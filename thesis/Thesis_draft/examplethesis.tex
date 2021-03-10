@@ -891,13 +891,36 @@ MAPE          & 96.49\% & 87.61\%    \\
 RMSE          & 385.23  & 372.61     \\ 
 \bottomrule
 \end{tabular}
-\caption{Training errors for baseline and ANN flow-speed relationship model.}
+\caption{Training errors for baseline and univariate ANN flow-speed relationship model.}
 \label{tab:training_errors}
 \end{table}
 
 Generally speaking, the ANN flow-speed relationship fits the training samples better than the baseline model, especially in the free-flow regime. From figure~\ref{fig:base_ann_training}, we can see that the baseline model uses linear regression to fit the samples in the free-flow regime, which is a common method for fitting the flow-speed relationship in free-flow regime \cite{blandin_individual_speed, nielsen_flow-speed_relations}. However, the flow-speed relationship in the free-flow regime is more S-shaped than linear in our dataset. ANN as a non-parametric model without fixed functional forms can adapt itself to the data and better fit the S-shaped flow-speed relationship in the free-flow regime. The ANN also has an advantage in the high-speed region, i.e., speed is larger than 90 km/h, where the traffic flow is low and barely changes with the speed.
 
 % training results and temporal features for temporal ANN
+
+Although the ANN can model the flow-speed relationship better than the baseline model, it does not mean that there is no space to improve our estimation model. In figure~\ref{fig:base_ann_training}, we can see that relationship between flow and speed is not deterministic; each speed value usually corresponds to a wide range of flow values in the samples. For example, when the speed is 80 km/h in the free-flow regime, the flow ranges from about 100 veh/h to 1500 veh/h, near eighty percent of the entire flow range! As we mentioned in the previous section, the flow-speed relationship varies over time rather than stationary. Thus, a deterministic curve could not capture the traffic flow variation given the same speed under different traffic conditions over time. One way to tackle this problem is to model the dynamic relationship using stochastic statistical models, e.g., Bayesian networks, which consider the transition between traffic states over time  \cite{neumann_bayesian}.
+
+Another method to capture the dynamic flow-speed relationship in a road segment is to represent the flow-speed relationship as a time-varying function that considers temporal factors, e.g., time of a day, as features that affect the relationship curves. Figure~\ref{fig:temporalFactors} shows flow-speed behaviors of training samples in different time segments. In figure~\ref{fig:temporalFactor_a}, samples' distributions are different during different time segments of a day. For example, the traffic flow drops after 18:00 as compared with the earlier traffic states during the rush hours given the same speed. Weekdays and weekends also exhibit different behavior of flow-speed relationship. Figure~\ref{fig:temporalFactor_b} shows the training samples collected on Sunday (7\textsuperscript{th}) and Tuesday (9\textsuperscript{th}) in the same road segment. In figure~\ref{fig:temporalFactor_b}, we can see that the shape of relationship curves is different on the weekend from a weekday. The traffic flow on weekdays and weekends could significantly differ given the same speed in some time segments, e.g., morning.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{temporal_factors_a.png}
+        \caption{Samples at different times of the day}
+        \label{fig:temporalFactor_a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{temporal_factors_b.png}
+        \caption{Samples on the weekday and weekend.}
+        \label{fig:temporalFactor_b}
+    \end{subfigure}
+    \caption{Training samples' different flow-speed behaviors in different time segments.}
+    \label{fig:temporalFactors}
+\end{figure}
 
 \clearpage
 
