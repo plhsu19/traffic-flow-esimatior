@@ -101,6 +101,7 @@
 \usepackage{multirow}
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage{rotating}  % insert a vertical table which occupies entire page
   
   
 % document (body) begins
@@ -326,7 +327,7 @@ The approach proposed in this work is trained and tested using both stationary a
 \section{Background}
 \label{sec:background}
 \renewcommand{\thefootnote}{\arabic{footnote}}
-The thesis project is a part of the TENS-project, an ongoing research project at \gls{rise}. All the datasets for this work were used with RISE permission for research purposes in the TENS-project\footnote{www.tens-project.info}. The TENS project's goal is network-wide monitoring of road traffic-induced energy consumption and vehicular emission based on alternative traffic sensor data. To precisely calculate the vehicular emission and energy consumption, comprehensive information of traffic state variables, i.e., speed and flow, in a road network's spatiotemporal domain is necessary.
+The thesis project is a part of the TENS-project, an ongoing research project at RISE, the Research Institutes of Sweden, SICS. All the datasets for this work were used with RISE permission for research purposes in the TENS-project\footnote{www.tens-project.info}. The TENS project's goal is network-wide monitoring of road traffic-induced energy consumption and vehicular emission based on alternative traffic sensor data. To precisely calculate the vehicular emission and energy consumption, comprehensive information of traffic state variables, i.e., speed and flow, in a road network's spatiotemporal domain is necessary.
 
 \section{Problem}
 
@@ -566,7 +567,6 @@ Traffic data provided by two sensor platforms are used to train and test the est
 \textbf{Road Segment} & \textbf{INRIX ID} & \textbf{MCS ID} \\
 \midrule
 South          & 1071883675 & 1159     \\
-\midrule
 North          & 225285973  & 1162     \\ 
 \bottomrule
 \end{tabular}
@@ -809,7 +809,7 @@ In this work, the \acrfull{rmse} and the \acrfull{mape} are used to evaluate the
 
 In equation~\ref{eq:rmse} and \ref{eq:mape}, $y^i$ and $\hat{y}^i$ is the observed value and estimated value of the i\textsuperscript{th} sample, respectively, and m is the number of the samples. RMSE measures the differences between values predicted by an estimator and the actual value, i.e., the prediction errors, and computes the square root of the average of squared errors. RMSE is also a straightforward measure that has the same unit as the predicted variable. On the other hand, MAPE expresses the accuracy as a “percentage error” by computing the average of absolute ratios of prediction error to the actual value. The MAPE in the project is presented in percentage after multiplying by 100\%.
 
-\chapter{Results and Discussions }
+\chapter{Results and Discussion}
 \label{ch:resultsAndDiscussions}
 This chapter presents the results of implementation and the validation of estimation models introduced in chapter~\ref{ch:methodologyAndDatasets}. The first three sections of this chapter describe the results of data preparation, model training, and validation of the estimation models. We then discuss the results in the last section.
 
@@ -887,7 +887,6 @@ Figure~\ref{fig:base_ann_training} shows the baseline and the ANN flow-speed rel
 \textbf{Training Error} & \textbf{Baseline Model} & \textbf{ANN Model} \\
 \midrule
 MAPE          & 96.49\% & 87.61\%    \\
-\midrule
 RMSE          & 385.23  & 372.61     \\ 
 \bottomrule
 \end{tabular}
@@ -947,7 +946,30 @@ Figure~\ref{fig:mape_histogram} represents the overview of the estimation result
 
 Models generally perform better on the south segment, where the models were trained, than on its consecutive adjacent segment, i.e., the north segment, except the spatiotemporal ANN model on the rightmost. For example, the baseline model has a smaller MAPE of 98.73\% on the south segment than the MAPE of 127.00\% on the north segment. The reason for the phenomenon is quite straightforward. As traffic conditions depend on many space-related factors \cite{seo_tse, wang_tse_online_calibration}, the traffic flow relationship on one segment may be slightly different from adjacent segments. Estimation models could perform well on the segment where they were trained as long as the traffic condition does not change much in the short-term future, e.g., one week in our case. However, they may not perform well on the adjacent segments because the adjacent segments' traffic flow relationships could be slightly different from those learned by the models. Therefore, the models produce more accurate estimations on the south segment than on the north segment. However, as shown in figure~\ref{fig:mape_histogram}, the degradation of estimation performance on the north segment could be mitigated using ANN as the estimation model, which will be discussed in detail later. On the other hand, the spatiotemporal ANN has similar MAPEs on both road segments because the model was trained on the samples from the both segments, which enable it to learn the unique traffic flow relationship for each segment.
 
+The models in the figure~\ref{fig:mape_histogram} are presented from left to right with increasing complexity. The baseline model on the left is the simplest model with only one input feature, speed, and the spatiotemporal ANN on the rightmost is the most complex, having the most input features and model parameters. As shown in the figure, incorporating additional features and increasing the model complexity generally can improve the estimation performance on both segments. However, this trend is not always valid when evaluating the performance using RMSE, which we will see soon. We use the baseline model's MAPEs, i.e., 98.73\% on the south and 127.00\% on the north, as the reference performance to compare with the remaining ANN models. Tables mape improvement shows the improvements of ANN models as compared with the baseline model. 
 
+\begin{sidewaystable}
+\centering
+\begin{tabular}{@{}lllllllllll@{}}
+\toprule
+Baseline & \multicolumn{4}{l}{ANN} & \multicolumn{4}{l}{Temporal ANN} & \multicolumn{2}{l}{Spatiotemporal ANN} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-11}
+speed & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+MAPE & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv \\
+\midrule
+98.73\% & 92.36\%  & \textbf{6.4\%} & 91.68\% & \textbf{7.1\%} & 11.54\% & \textbf{88.3\%} & 10.57\% & \textbf{89.3\%} & 10.05\% & \textbf{89.8\%} \\
+127.00\% & 106.05\% & \textbf{16.5\%} & 103.83\% & \textbf{18.2\%} & 14.40\% & \textbf{88.7\%} & 12.73\% & \textbf{90.0\%} & 10.75\% & \textbf{91.5\%} \\
+\bottomrule
+\end{tabular}
+\caption{Improvements in flow estimation error (MAPE) achieved by ANN models as compared with the baseline model.}
+\label{tab:mape_imrpov}
+\end{sidewaystable}
+
+
+
+
+The ANN models proposed can be categorized into three groups: The first group of ANNs considers only traffic variables, i.e., speed and travel time, as the independent variables without considering temporal or spatial dependency. The second group considers temporal dependency in addition to the traffic variables, while the third group considers both the spatial and temporal dependency. ANN using only speed as its independent variable has an improvement of 6.4\% on the south segment and 16.5\% on the north than the baseline model. Notice that ANN improves 10\% more accuracy on the north segment, i.e., the adjacent segment, than on the south segment, which means ANN can mitigate the notable performance difference between adjacent segments when using the baseline for estimation. The reason for ANN's better generality on the adjacent road segments will be discussed in the following section. ANN uses both speed and travel time as independent variables reach an improvement of 7.1\% on the south segment and 18.2\% on the north, which slightly improves the previous ANN using only speed as the independent variable.
 
 
 
