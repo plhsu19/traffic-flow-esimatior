@@ -807,7 +807,7 @@ In this work, the \acrfull{rmse} and the \acrfull{mape} are used to evaluate the
     \label{eq:mape}
 \end{equation}
 
-In equation~\ref{eq:rmse} and \ref{eq:mape}, $y^i$ and $\hat{y}^i$ is the observed value and estimated value of the i\textsuperscript{th} sample, respectively, and m is the number of the samples. RMSE measures the differences between values predicted by an estimator and the actual value, i.e., the prediction errors, and computes the square root of the average of squared errors. RMSE is also a straightforward measure that has the same unit as the predicted variable. On the other hand, MAPE expresses the accuracy as a “percentage error” by computing the average of absolute ratios of prediction error to the actual value. The MAPE in the project is presented in percentage after multiplying by 100\%.
+In equation~\ref{eq:rmse} and \ref{eq:mape}, $y^i$ and $\hat{y}^i$ is the observed value and estimated value of the i\textsuperscript{th} sample, respectively, and m is the number of the samples. RMSE measures the differences between values predicted by an estimator and the actual value, i.e., the prediction errors, and computes the square root of the average of squared errors. RMSE is also a straightforward measure that has the same unit as the predicted variable, i.e., veh/h in this thesis. On the other hand, MAPE expresses the accuracy as a “percentage error” by computing the average of absolute ratios of prediction error to the actual value. The MAPE in the project is presented in percentage after multiplying by 100\%.
 
 \chapter{Results and Discussion}
 \label{ch:resultsAndDiscussions}
@@ -946,35 +946,57 @@ Figure~\ref{fig:mape_histogram} represents the overview of the estimation result
 
 Models generally perform better on the south segment, where the models were trained, than on its consecutive adjacent segment, i.e., the north segment, except the spatiotemporal ANN model on the rightmost. For example, the baseline model has a smaller MAPE of 98.73\% on the south segment than the MAPE of 127.00\% on the north segment. The reason for the phenomenon is quite straightforward. As traffic conditions depend on many space-related factors \cite{seo_tse, wang_tse_online_calibration}, the traffic flow relationship on one segment may be slightly different from adjacent segments. Estimation models could perform well on the segment where they were trained as long as the traffic condition does not change much in the short-term future, e.g., one week in our case. However, they may not perform well on the adjacent segments because the adjacent segments' traffic flow relationships could be slightly different from those learned by the models. Therefore, the models produce more accurate estimations on the south segment than on the north segment. However, as shown in figure~\ref{fig:mape_histogram}, the degradation of estimation performance on the north segment could be mitigated using ANN as the estimation model, which will be discussed in detail later. On the other hand, the spatiotemporal ANN has similar MAPEs on both road segments because the model was trained on the samples from the both segments, which enable it to learn the unique traffic flow relationship for each segment.
 
-The models in the figure~\ref{fig:mape_histogram} are presented from left to right with increasing complexity. The baseline model on the left is the simplest model with only one input feature, speed, and the spatiotemporal ANN on the rightmost is the most complex, having the most input features and model parameters. As shown in the figure, incorporating additional features and increasing the model complexity generally can improve the estimation performance on both segments. However, this trend is not always valid when evaluating the performance using RMSE, which we will see soon. We use the baseline model's MAPEs, i.e., 98.73\% on the south and 127.00\% on the north, as the reference performance to compare with the remaining ANN models. Tables mape improvement shows the improvements of ANN models as compared with the baseline model. 
+The models in the figure~\ref{fig:mape_histogram} are presented from left to right with increasing complexity. The baseline model on the left is the simplest model with only one input feature, speed, and the spatiotemporal ANN on the rightmost is the most complex, having the most input features and model parameters. As shown in the figure, incorporating additional features and increasing the model complexity generally can improve the estimation performance on both segments. However, this trend is not always valid when evaluating the performance using RMSE, which we will see soon.
 
 \begin{sidewaystable}
 \centering
-\begin{tabular}{@{}lllllllllll@{}}
+\begin{tabular}{@{}llllllllllll@{}}
 \toprule
-Baseline & \multicolumn{4}{l}{ANN} & \multicolumn{4}{l}{Temporal ANN} & \multicolumn{2}{l}{Spatiotemporal ANN} \\
-\cmidrule(lr){2-5} \cmidrule(lr){6-9} \cmidrule(lr){10-11}
-speed & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
-MAPE & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv \\
+& Baseline & \multicolumn{4}{l}{ANN} & \multicolumn{4}{l}{Temporal ANN} & \multicolumn{2}{l}{Spatiotemporal ANN} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10} \cmidrule(lr){11-12}
+& speed & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12}
+& MAPE(\%) & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv & MAPE & improv \\
 \midrule
-98.73\% & 92.36\%  & \textbf{6.4\%} & 91.68\% & \textbf{7.1\%} & 11.54\% & \textbf{88.3\%} & 10.57\% & \textbf{89.3\%} & 10.05\% & \textbf{89.8\%} \\
-127.00\% & 106.05\% & \textbf{16.5\%} & 103.83\% & \textbf{18.2\%} & 14.40\% & \textbf{88.7\%} & 12.73\% & \textbf{90.0\%} & 10.75\% & \textbf{91.5\%} \\
+South & 98.73 & 92.36  & \textbf{6.4\%} & 91.68 & \textbf{7.1\%} & 11.54 & \textbf{88.3\%} & 10.57 & \textbf{89.3\%} & 10.05 & \textbf{89.8\%} \\
+North & 127.00 & 106.05 & \textbf{16.5\%} & 103.83 & \textbf{18.2\%} & 14.40 & \textbf{88.7\%} & 12.73 & \textbf{90.0\%} & 10.75 & \textbf{91.5\%} \\
 \bottomrule
 \end{tabular}
-\caption{Improvements in flow estimation error (MAPE) achieved by ANN models as compared with the baseline model.}
+\caption{Improvements of flow estimation performance (MAPE) achieved by ANN models over the baseline model.}
 \label{tab:mape_imrpov}
+
+\bigskip
+\bigskip
+
+\begin{tabular}{@{}llllllllllll@{}}
+\toprule
+& Baseline & \multicolumn{4}{l}{ANN} & \multicolumn{4}{l}{Temporal ANN} & \multicolumn{2}{l}{Spatiotemporal ANN} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10} \cmidrule(lr){11-12}
+& speed & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} & \multicolumn{2}{l}{speed, travel time} & \multicolumn{2}{l}{speed} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12}
+& RMSE(veh/h) & RMSE & improv & RMSE & improv & RMSE & improv & RMSE & improv & RMSE & improv \\
+\midrule
+South & 380.98 & 373.56  & \textbf{1.9\%} & 372.83 & \textbf{2.1\%} & 96.81 & \textbf{74.6\%} & 94.90 & \textbf{75.1\%} & 88.33 & \textbf{76.8\%} \\
+North & 423.15 & 391.53 & \textbf{7.5\%} & 397.97 & \textbf{6.0\%} & 120.02 & \textbf{71.6\%} & 104.36 & \textbf{75.3\%} & 87.71 & \textbf{79.3\%} \\
+\bottomrule
+\end{tabular}
+\caption{Improvements of flow estimation performance (RMSE) achieved by ANN models over the baseline model.}
+\label{tab:rmse_imrpov}
 \end{sidewaystable}
 
+Tables \ref{tab:mape_imrpov} shows the improvements of ANN models as compared with the baseline model. We use the baseline model's MAPEs, i.e., 98.73\% on the south and 127.00\% on the north, as the reference performance to compare with the remaining ANN models. The ANN models can be categorized into three groups: The first group of ANNs considers only traffic variables, i.e., speed and travel time, as the independent variables without considering temporal or spatial dependency. The second group of ANNs considers temporal dependency in addition to the traffic variables, while the third group considers both the spatial and temporal dependency. The ANN using only speed as its independent variable has an improvement of 6.4\% on the south segment and 16.5\% on the north over the baseline model (south MAPE = 92.36\%, north MAPE = 106.05\%). Notice that ANN improves 10\% more on the north segment over the baseline case than on the south segment, which means ANN can mitigate the notable performance difference between adjacent segments when using the baseline model for estimation. The reason for ANN's better generality on the adjacent road segments will be discussed in the following section.The ANN incorporates the travel time as an additional independent variable reaches an improvement of 7.1\% on the south segment and 18.2\% on the north, which slightly improves the previous univariate ANN on both road segments. We will also discuss travel time as an additional input feature for flow estimation in the following section.
 
+Incorporating temporal factors into flow estimation improves the performance considerably. As shown in the table~\ref{tab:mape_imrpov}, the temporal ANN, which uses speed and time-related features, i.e., hour and day, as its independent variables, dramatically improves 88.3\% on the south segment and 88.7\% on the north segment over the baseline's performance. The temporal ANN's errors are nearly one-tenth of that in the baseline model for both segments (south MAPE = 11.54\%, north MAPE = 14.40\%). The result validates our hypothesis that incorporating temporal dependency into flow estimation provides more information to the ANN and better captures the dynamic flow-speed relationship that changes over time. The temporal ANN with travel time as its additional information source also shows a slight improvement over the temporal ANN without using the travel time, which is similar to the static ANN models. Notice that the performance differences between two adjacent road segments still exist when using temporal ANNs for estimation, but they are much smaller than those in the static ANN models.
 
+Finally, the spatiotemporal ANN, which incorporates speed and time-related and space-related features into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN's performance gap between the two road segments is small and negligible, as we expected. Because the spatiotemporal ANN is the only model trained on the data from both road segments, it learned the unique characteristics of traffic flow relationships belong to each segment and hence achieve a similar estimation performance on both segments.
 
-The ANN models proposed can be categorized into three groups: The first group of ANNs considers only traffic variables, i.e., speed and travel time, as the independent variables without considering temporal or spatial dependency. The second group considers temporal dependency in addition to the traffic variables, while the third group considers both the spatial and temporal dependency. ANN using only speed as its independent variable has an improvement of 6.4\% on the south segment and 16.5\% on the north than the baseline model. Notice that ANN improves 10\% more accuracy on the north segment, i.e., the adjacent segment, than on the south segment, which means ANN can mitigate the notable performance difference between adjacent segments when using the baseline for estimation. The reason for ANN's better generality on the adjacent road segments will be discussed in the following section. ANN uses both speed and travel time as independent variables reach an improvement of 7.1\% on the south segment and 18.2\% on the north, which slightly improves the previous ANN using only speed as the independent variable.
+Table~\ref{tab:rmse_imrpov} represents the overall estimation performance evaluated in RMSE for all models and the improvements achieved by ANN models compared with the baseline model. Although the improved proportions are different from the ones in MAPE, the overall trends of performance in RMSE are generally the same as the trends in MAPE regarding the changes made to the estimation model. However, one thing worth notice is that adding the additional source of traffic information, i.e., the travel time, into ANN models only achieves tiny improvements in RSME on the south road segment compared with their counterparts without it. For example, in table~\ref{tab:rmse_imrpov}, the ANN using both speed and travel time as independent variables only achieves 0.2\% more improvement, i.e., a decrement of 0.73 veh/h in RMSE, on the south segment than the ANN using speed as its sole information source. Moreover, the addition of travel time not constantly improves the ANN's estimation performance in RMSE on the north segment. It could slightly degrade the ANN's performance on the north segment compared with the ANN without using travel time as an additional information source.
 
+Generally speaking, using the new ML technique, i.e., ANN, and incorporating additional dependencies, i.e., temporal dependency, spatial dependency, and travel time, into flow estimation improves the performance compared with the classic flow-speed relationship model. As we exhibited that improvements in MAPE can be as significant as 89.8\% on the south segment and 91.5\% on the north. The best performer, i.e., spatiotemporal ANN, achieves an improvement of 293 veh/h in RMSE (76.8\%) when being used for traffic flow estimation on the south segment and 335 veh/h (79.3\%) on the north segment over the baseline model. ANN models generally achieve more improvements on the north segment than on the south segment. However, notice that travel time as an additional information source contributes only tiny improvements in MAPE and could cause slight performance degradation on the north segment when evaluated using RMSE, which should be utilized with extra care.
 
+\cleardoublepagepage
 
 
-\clearpage
 
 
 
@@ -1014,166 +1036,6 @@ The ANN models proposed can be categorized into three groups: The first group of
 
 
 
-
-% Chapter 3 Methodology
-\chapter{Methodology}
-\label{ch:methods}
-
-Describe the engineering-related contents (preferably with models) and the research methodology and methods that are used in the degree project. 
-
-Give a theoretical description of the scientific or engineering methodology are you going to use and why have you chosen this method. What other methods did you consider and why did you reject them.
-
-In this chapter, you describe what engineering-related and scientific skills you are going to apply, such as modeling, analyzing, developing, and evaluating engineering-related and scientific content. The choice of these methods should be appropriate for the problem . Additionally, you should be consciousness of aspects relating to society and ethics (if applicable). The choices should also reflect your goals and what you (or someone else) should be able to do as a result of your solution - which could not be done well before you started.
-
-The purpose of this chapter is to provide an overview of the research method
-used in this thesis. Section~\ref{sec:researchProcess} describes the research
-process. Section~\ref{sec:researchParadigm} details the research
-paradigm. Section~\ref{sec:dataCollection} focuses on the data collection
-techniques used for this research. Section~\ref{sec:experimentalDesign}
-describes the experimental design. Section~\ref{sec:assessingReliability}
-explains the techniques used to evaluate the reliability and validity of the
-data collected. Section~\ref{sec:plannedDataAnalysis} describes the method
-used for the data analysis. Finally, Section~\ref{sec:evaluationFramework}
-describes the framework selected to evaluate xxx.
-
-\todo[inline, backgroundcolor=aqua]{Vilka vetenskapliga eller ingenjörsmetodik ska du använda och varför har du valt den här metoden. Vilka andra metoder gjorde du överväga och varför du avvisar dem.
-Vad är dina mål? (Vad ska du kunna göra som ett resultat av din lösning - vilken inte kan göras i god tid innan du började)
-Vad du ska göra? Hur? Varför? Till exempel, om du har implementerat en artefakt vad gjorde du och varför? Hur kommer ditt utvärdera den.
-Syftet med detta kapitel är att ge en översikt över forsknings metod som
-används i denna avhandling. Avsnitt~\ref{sec:researchProcess} beskriver forskningsprocessen. Avsnitt~\ref{sec:researchParadigm} detaljer forskningen paradigm. Avsnitt~\ref{sec:dataCollection} fokuserar på datainsamling
-tekniker som används för denna forskning. Avsnitt~\ref{sec:experimentalDesign} beskriver experimentell
-design. Avsnitt~\ref{sec:assessingReliability} förklarar de tekniker som används för att utvärdera
-tillförlitligheten och giltigheten av de insamlade uppgifterna. Avsnitt~\ref{sec:plannedDataAnalysis}
-beskriver den metod som används för dataanalysen. Slutligen, Avsnitt~\ref{sec:evaluationFramework}
-beskriver ramverket valts för att utvärdera xxx.
-}
-
-\begin{swedishnotes}
-Ofta kan man koppla ett antal följdfrågor till undersökningsfrågan och problemlösningen t ex
-\begin{itemize}
-\color{blue}
-\item Vilken process skall användas för konstruktion av lösningen och vilken process skall kopplas till denna för att svara på undersökningsfrågan?
-\item Hur och vilket resultat (storheter) skall presenteras både för att redovisa svar på undersökningsfrågan (resultatkapitlet i denna rapport) och redovisa resultat av problemlösningen (prototypen, ofta dokument som bilagor men vilka dokument och varför?).
-\item Vilken teori/teknik skall väljas och användas både för undersökningen (taxonomi, matematik, grafer, storheter mm)  och  problemlösning (UML, UseCases, Java mm) och varför?
-\item Vad behöver du som student leverera för att uppnå hög kvaliet (minimikrav) eller mycket hög kvalitet på examensarbetet?
-Frågorna kopplar till de följande underkapitlen.\todo[inline, backgroundcolor=aqua]{Resonemanget bygger på att studenter på hing-programmet ofta skall konstruera något åt problemägaren och att man till detta måste koppla en intressant ingenjörsfråga. Det finns hela tiden en dualism mellan dessa aspekter i exjobbet.} 
-\end{itemize}
-\end{swedishnotes}
-
-\section{Research Process}
-\todo[inline, backgroundcolor=aqua]{Undersökningsrocess och utvecklingsprocess}
-\label{sec:researchProcess}
-Figure~\ref{fig:researchprocess} shows the steps conducted in order to carry out this research. 
-\begin{swedishnotes}
-  Figur~\ref{fig:researchprocess} visar de steg som utförs för att genomföra
-  
-  Beskriv, gärna med ett aktivitetsdiagram (UML?), din undersökningsprocess och utvecklingsprocess.  Du måste koppla ihop det akademiska intresset (undersökningsprocess) med ursprungsproblemet (utvecklingsprocess)
-denna forskning.
-\todo[inline, backgroundcolor=aqua]{Aktivitetsdiagram från t ex UML-standard}
-\end{swedishnotes}
-\selectlanguage{USenglish}
- 
-\begin{figure}[!h]
-  \begin{center}
-    \includegraphics[width=0.5\textwidth]{researchprocess.png}
-  \end{center}
-  \caption{Research Process}
-  \label{fig:researchprocess}
-\end{figure}
-\todo[inline, backgroundcolor=aqua]{Forskningsprocessen}
-
-\section{Research Paradigm}
-\label{sec:researchParadigm}
-\todo[inline, backgroundcolor=aqua]{Undersökningsparadigm}
-\begin{swedishnotes}
-Exempelvis\\
-Positivistisk (vad/hur fungerar det?) kvalitativ fallstudie med en deduktivt (förbestämd) vald ansats och ett induktivt(efterhand uppstår dataområden och data) insamlade av data och erfarenheter.
-\end{swedishnotes}
-
-\section{Data Collection}
-\todo[inline]{This should also show that you are aware of the social and ethical concerns that might be relevant to your data collection method.)}
-\label{sec:dataCollection}
-\todo[inline, backgroundcolor=aqua]{Datainsamling}
-\begin{swedishnotes}
-(Detta bör också visa att du är medveten om de sociala och etiska frågor som
-kan vara relevanta för dina data insamlingsmetod.)
-\end{swedishnotes}
-
-\subsection{Sampling}
-\todo[inline, backgroundcolor=aqua]{Stickprovsundersökning}
-
-\subsection{Sample Size}
-\todo[inline, backgroundcolor=aqua]{Provstorleken}
-
-\subsection{Target Population}
-\todo[inline, backgroundcolor=aqua]{Målgruppen}
-
-\section{Experimental design/Planned Measurements}
-\label{sec:experimentalDesign}
-\todo[inline, backgroundcolor=aqua]{Experimentdesign/Mätuppställning}
-
-\subsection{Test environment/test bed/model}\todo[inline]{Describe everything that someone else would need to reproduce your test environment/test bed/model/… .}
-\todo[inline, backgroundcolor=aqua]{Testmiljö/testbädd/modell}
-\begin{swedishnotes}
-Beskriv allt att någon annan skulle behöva återskapa din testmiljö / testbädd / modell / …
-\end{swedishnotes}
-
-\subsection{Hardware/Software to be used}
-\todo[inline, backgroundcolor=aqua]{Hårdvara / programvara som ska användas}
-
-
-\section{Assessing reliability and validity of the data collected}
-\todo[inline, backgroundcolor=aqua]{Bedömning av validitet och reliabilitet hos använda metoder och insamlade data }
-\label{sec:assessingReliability}
-
-\subsection{Validity of method}
-\todo[inline]{How will you know if your results are valid?}
-\todo[inline, backgroundcolor=aqua]{Giltigheten av metoder}
-\begin{swedishnotes}
-  Har dina metoder ge dig de rätta svaren och lösning? Var metoderna korrekt?
-\end{swedishnotes}
-
-\subsection{Reliability of method}
-\todo[inline]{How will you know if your results are reliable?}
-\todo[inline, backgroundcolor=aqua]{Tillförlitlighet av metoder}
-\begin{swedishnotes}
-Hur bra är dina metoder, finns det bättre metoder? Hur kan du förbättra dem?
-\end{swedishnotes}
-
-\subsection{Data validity}
-\todo[inline, backgroundcolor=aqua]{Giltigheten av uppgifter}
-\begin{swedishnotes}
-Hur vet du om dina resultat är giltiga? Har ditt resultat mäta rätta?
-\end{swedishnotes}
-
-\subsection{Reliability of data}
-\todo[inline, backgroundcolor=aqua]{Tillförlitlighet av data}
-\begin{swedishnotes}
-Hur vet du om dina resultat är tillförlitliga? Hur bra är dina resultat?
-\end{swedishnotes}
-
-
-\section{Planned Data Analysis}
-\todo[inline, backgroundcolor=aqua]{Metod för analys av data}
-\label{sec:plannedDataAnalysis}
-
-\subsection{Data Analysis Technique}
-\todo[inline, backgroundcolor=aqua]{Dataanalys Teknik}
-
-\subsection{Software Tools}
-\todo[inline, backgroundcolor=aqua]{Mjukvaruverktyg}
-
-
-\section{Evaluation framework}
-
-
-\section{System documentation}\todo[inline]{If this is going to be a complete document consider putting it in as an appendix, then just put the highlights here.}
-\todo[inline, backgroundcolor=aqua]{Systemdokumentation}
-\begin{swedishnotes}
-Med vilka dokument och hur skall en konstruerad prototyp dokumenteras? Detta blir ofta bilagor till rapporten och det som problemägaren till det ursprungliga problemet (industrin) ofta vill ha.\\
-Bland dessa bilagor återfinns ofta, och enligt någon angiven standard, kravdokument, arkitekturdokument, designdokumnet, implementationsdokument, driftsdokument, testprotokoll mm.
-\end{swedishnotes}
-\cleardoublepage
 \chapter{What you did}\todo[inline]{Choose your own chapter title to describe this}
 \todo[inline, backgroundcolor=aqua]{[Vad gjorde du? Hur gick det till? – Välj lämplig rubrik (“Genomförande”, “Konstruktion”, ”Utveckling”  eller annat]}
 \label{ch:whatYouDid}
