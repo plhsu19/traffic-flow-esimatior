@@ -995,12 +995,12 @@ Generally speaking, using the new ML technique, i.e., ANN, and incorporating add
 
 \section{Discussion}
 \label{sec:discussion}
-This section analyzes and discusses some phenomena we observed in the results from the previous section. First of all, we will discuss why the ANN produces a better estimation performance on the adjacent road segment, i.e., ANN has a better generality on the road segments adjacent to the one where it was trained, as compared with the classic flow-speed relationship. Then we will discuss the role the travel time plays as an additional information source for flow estimation, e.g., what extra information of traffic flow does the travel time provide and why its benefit to the performance improvement is weak when evaluated in RMSE? Finally, we will shortly discuss what might happen when we incorporate spatial dependency into our ANN model and use data from multiple road segments for training. We also discuss what benefits it would bring us when we train a central estimation model that can learn spatial dependency in the entire network system with many road segments.
+This section analyzes and discusses some phenomena we observed in the results from the previous section. First of all, we will discuss why the ANN produces a better estimation performance on the adjacent road segment than the classic flow-speed relationship. Then we will discuss the role the travel time plays as an additional information source for flow estimation, e.g., why its benefit to the performance improvement is weak? Finally, we will shortly discuss what might happen when we incorporate spatial dependency into our ANN model and use data from multiple road segments for training. We also discuss what benefits it could bring us if we train a central estimation model that learns spatial dependency for the entire road network with many road segments.
 
 \subsection{Generality}
 \label{subsec:generality}
 
-In the flow estimation results, the ANN using speed as the independent variable improves more performance, i.e., larger than 10\%, on the north segment than on the south segment. The result implies that the ANN model's performance degradation on the adjacent road segment is less severe than the baseline model. If a model can perform well on the road segments where it has never seen before during the model training, we say it has good generality. Good generality of an estimation model is preferable because one of our goals is to use the model to estimate unobserved traffic flow on the road segments near the one where the model was trained. 
+In the flow estimation results, the ANN using speed as the independent variable improves more performance, i.e., larger than 10\%, on the north segment than on the south segment. The result implies that the ANN model's performance degradation on the adjacent road segment is less severe than the baseline model's degradation. If a model can perform well on the road segments from which it has never seen data during the model training, we say it has good generality. Good generality of an estimation model is preferable because one of our goals is to use the model to estimate unobserved traffic flow on the road segments near the one where the model was trained. 
 
 \begin{figure}[!ht]
     \centering
@@ -1009,7 +1009,7 @@ In the flow estimation results, the ANN using speed as the independent variable 
     \label{fig:distribution_histogram}
 \end{figure}
 
-However, why ANN model can perform more consistently on both road segments than the baseline model? We believe it is because ANN was trained on the scaled traffic variables rather than on traffic variables' original values. Remember the results of data preparation from the figure \ref{fig:standardization_boxplots}, the median speeds on the north segment are slower than the south segment. Figure \ref{fig:distribution_histogram} shows the speed distributions before and after the standardization in the training and test datasets for the baseline and ANN (speed) model. We can see in the figure that the distribution of original speed on the north segment slightly shifts from the south segment's speed distribution to the left under the free-flow regime. The difference in free-flow speed between different road segments could be caused by many reasons, e.g., varying speed limits on different links \cite{neumann_bayesian}.
+However, why ANN model can perform more consistently on both road segments than the baseline model? We believe it is because ANN was trained on the scaled traffic variables rather than on traffic variables' original values. Remember the results of data preparation from the figure \ref{fig:standardization_boxplots}, the median speeds on the north segment are slower than the south segment. Figure \ref{fig:distribution_histogram} shows the speed distributions before and after the standardization in the training and test datasets for the baseline and ANN (speed) model. We can see in the figure that the distribution of speed on the north segment slightly shifts from the south segment's speed distribution to the left under the free-flow regime. The difference in free-flow speed between different road segments could be caused by many reasons, e.g., varying speed limits on different links \cite{neumann_bayesian}.
 
 
 One reason for the baseline model's more severe performance degradation on the north segment is that we directly feed the north segment's speed into the flow-speed relationship as the evidence speed during the flow estimation. Notice that the flow-speed relationship in the baseline model was calibrated based on the south segment's speeds. The difference in speed distribution between two road segments could lead to the mismatch between the baseline flow-speed relationship and the flow-speed relationship lying in the samples observed on the north segment.
@@ -1021,31 +1021,33 @@ One reason for the baseline model's more severe performance degradation on the n
     \label{fig:relation_shift_baseline}
 \end{figure}
 
-Figure \ref{fig:relation_shift_baseline} shows the test data from both segments and the flow estimation produced by the baseline model based on the corresponding speeds. As shown in the figure, the baseline model uses the same flow-speed relationship, which was calibrated using the training speed from the south, to estimate the flow on both segments. However, since the flow-speed relationship lying in the north segment's test samples, which are brown circles, shifts to the left compared with the south segment's flow-speed relationship, the baseline relationship does not suit the actual relationship on the north segment as on the south segment. The baseline, therefore, suffers from a more noticeable performance degradation on the north segment.
+Figure \ref{fig:relation_shift_baseline} shows the test data from both segments and the flow estimations produced by the baseline model based on the corresponding speeds. As shown in the figure, the baseline model uses the same flow-speed relationship, which was calibrated using the training speed from the south, to estimate the flow on both segments. However, since the flow-speed relationship lying in the north segment's test samples, which are brown circles, shifts to the left compared with the south segment's flow-speed relationship, the baseline relationship does not suit the actual relationship on the north segment as on the south segment. The baseline, therefore, suffers from a more noticeable performance degradation on the north segment.
 
-On the other hand, the ANN model was trained on the south road segment's standardized speed. As we mentioned before, we standardize the test datasets' speeds by subtracting the historical mean value obtained from the training dataset on the same road segment from the original speed values, then dividing the values by the historical standard deviation from the training dataset. As shown in the figure \ref{fig:distribution_histogram} and figure \ref{fig:standardization_boxplots}, the distribution of standardized speeds on the north segment becomes similar to the south segment's speed distributions. The difference in speed between two segments under the free-flow regime is disappeared. Figure \ref{subfig:relation_shift_ann_standardized} shows the test samples from both segments and the corresponding flow estimations produced by the ANN model, which are all plotted against the standardized speed. We can see from the figure that the relationships between flow and standardized speed on adjacent road segments are similar. The ANN relationship trained on one segment's standardized speed could also fit the relationship between flow and standardized speed on the adjacent road segment. Feature standardization gives ANN better resistance to the changing of speed distribution on different road segments.
+On the other hand, the ANN model was trained on the south road segment's standardized speed. As mentioned before, we standardized the test datasets' speeds by subtracting the historical mean value, which was obtained from the training dataset on the same road segment, from the original speed values, then dividing the values by the historical standard deviation. As shown in the figure \ref{fig:distribution_histogram}, the distribution of standardized speeds on the north segment becomes similar to the south segment's speed distributions. The difference in speed between two segments under the free-flow regime is disappeared. Figure \ref{subfig:relation_shift_ann_standardized} shows the test samples from both segments and the corresponding flow estimations produced by the ANN model, all based on the standardized speeds. We can see that the relationships between flow and standardized speed on the neighboring road segments are similar. The ANN relationship trained on the south segment's standardized speed could also fit the relationship between flow and standardized speed on its adjacent road segments.  
 
 \begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.7\textwidth}
         \centering
         \includegraphics[width=\textwidth]{relation_shift_ann_a.png}
-        \caption{dummy}
+        \caption{Flow-speed diagram based on the standardized speed.}
         \label{subfig:relation_shift_ann_standardized}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.7\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{relation_shift_ann_a.png}
-        \caption{dummy}
+        \includegraphics[width=\textwidth]{relation_shift_ann_b.png}
+        \caption{Flow-speed diagram based on the original speed.}
         \label{subfig:relation_shift_ann_raw}
     \end{subfigure}
     \caption{Test samples from both road segments and the corresponding flow estimations given by the ANN (speed) model.}
     \label{fig:relation_shift_ann}
 \end{figure}
 
+Figure \ref{subfig:relation_shift_ann_raw} shows the test samples on the two road segments and corresponding ANN model's estimations based on the actual speeds. The ANN model seems to adapt to the speed change under the free-flow regime and split into two flow-speed relationships to fit each segment's samples. In conclusion, standardization of features gives ANNs better resistance to speed differences between adjacent road segments. Although the ANN model is still far from a fully general model, it has better generality on neighboring road segments than the traditional flow-speed relationship.
 
-
+\subsection{Travel Time as an Additional Information Source}
+\label{subsec:discussionTravelTime}
 
 
 \cleardoublepagepage
