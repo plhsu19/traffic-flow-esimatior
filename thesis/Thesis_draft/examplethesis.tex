@@ -125,7 +125,7 @@
 
 
 \supervisor{Ian Marsh, Xiaoliang Ma}
-\examiner{}
+\examiner{Erik Jenelius}
 \hostcompany{RISE SICS AB} % Remove this line if the project was not done at a host company
 %\hostorganization{CERN}   % if there was a host organization
 
@@ -402,7 +402,7 @@ Data in figure~\ref{fig:tse} can be categorized into two groups according to the
 Various traffic data measurements, e.g., stationary and mobile data, and various TSE approaches, e.g., model-driven, data-driven, and streaming-data-driven approaches, are used for estimating traffic state variables in the time-space regions of interest, which will be introduced in the later sections of this chapter. From now on, "time-space region/domain" and "spatiotemporal region/domain" will be used interchangeably.
 
 \section{Traffic State Variables}
-This section aims to provide necessary information about the fundamental traffic state variables that are widely used to assess the traffic state. From a macroscopic view, the state of traffic on highways can be represented by three fundamental variables, speed, flow, and density \cite{seo_tse, elefteriadou_traffic_flow_theory}. We often assess the traffic on highways by describing the movement of a group of vehicles as a stream, i.e., traffic flow, flowing through the road segment at a macroscopic scale, rather than describing each vehicle's movement at a microscopic scale \cite{elefteriadou_traffic_flow_theory}. These three variables are therefore used to describe the traffic flow on highway segments. The definitions of the three variables are as follow:
+This section aims to provide necessary information about the fundamental traffic state variables that are widely used to assess the traffic state. From a macroscopic view, the state of traffic on highways can be represented by three fundamental variables, speed, flow, and density \cite{seo_tse, elefteriadou_traffic_flow_theory}. We often assess the traffic on highways by describing the movement of a group of vehicles as a stream flowing through the road segment at a macroscopic scale, rather than describing each vehicle's movement at a microscopic scale \cite{elefteriadou_traffic_flow_theory}. These three variables are therefore used to describe the traffic flow on highway segments. The definitions of the three variables are as follow:
 
 \textbf{Flow} is defined as the number of vehicles travel through a particular point or highway segment per unit of time \cite{elefteriadou_traffic_flow_theory}. It is typically expressed in vehicles per hour (veh/h) \cite{seo_tse, elefteriadou_traffic_flow_theory}.
 
@@ -415,11 +415,12 @@ This section aims to provide necessary information about the fundamental traffic
 \end{equation}
 Therefore, one can estimate the third variable when any two of variables are known \cite{elefteriadou_traffic_flow_theory}.
 
-In this work, we are only interested in flow and speed without including density into our estimation models for two reasons. First, density is difficult to measure directly with the current sensor technology \cite{elefteriadou_traffic_flow_theory}. The two sensor systems that we use also do not provide the measurement of density. Second, a subset of three variables, e.g., flow-speed, is typically sufficient to represent the traffic state because the remaining variable can be estimated using equation~\ref{eq:basic_traffic_variable_relation}. In our case, knowing the relationship between flow and speed, as well as other traffic data, is sufficient for our use-case, which is using this relationship to monitor the traffic condition, e.g., congestion and free-flow, and calculate traffic-induced energy consumption on highway facilities \cite{tsanakas_emission_estimation}.
+We are primarily interested in traffic flow and speed in this work without including density into our estimation models for two reasons. First, density is difficult to measure directly with the current sensor technology \cite{elefteriadou_traffic_flow_theory}. The two sensor systems that we use also do not provide the measurement of density. Second, a subset of three variables, e.g., flow-speed, is typically sufficient to represent the traffic state because the remaining variable can be estimated using equation~\ref{eq:basic_traffic_variable_relation}. In our case, knowing the flow and speed as well as their relationship is sufficient for our use case, which aims to monitor the traffic states in the road network system using alternative data sources, and based on which calculates the energy consumption.
+
 
 \section{Sensor Data Types}
 \label{sec:dataTypes}
-The traffic measurement data can be generally grouped into two categories, i.e., stationary data and mobile data, based on the ways they are collected.
+The traffic measurement data, which can provide us with information on microscopic traffic state variables and other traffic characteristics, can be grouped into two categories based on the ways they are collected:  stationary data and mobile data.
 
 \textbf{Stationary data} is collected by stationary sensors installed on highways, e.g., inductive loop, ultrasonic detector, and radar detector \cite{seo_tse}. These stationary sensors collect vehicle data at the installed locations, which is the conventional way to assess highway traffic adopted by road authorities. Stationary data can provide macroscopic variable flow and average speed based on the direct measurement of vehicle count and the instantaneous speed of individual vehicles passing the sensor locations. Although a full subset of traffic state variables can be obtained from the stationary data, the stationary sensors are only installed sparsely on highways, usually with the inter-sensor space ranging from hundred meters to several kilometers, because of the high installation and maintenance costs \cite{seo_tse}. Therefore, the stationary data's spatial regions are limited to the specific locations where the sensors are installed. Moreover, stationary sensors suffer from reliability problems such as missing counts, which results in missing data and invalid data \cite{duan_dl_imputation, chen_imputation_regression}.
 
@@ -989,9 +990,9 @@ Incorporating temporal factors into flow estimation improves the performance con
 
 Finally, the spatiotemporal ANN, which incorporates speed and time-related and space-related features into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN's performance gap between the two road segments is small and negligible, as we expected. Because the spatiotemporal ANN is the only model trained on the data from both road segments, it learned the unique characteristics of traffic flow relationships belong to each segment and hence achieve a similar estimation performance on both segments.
 
-Table~\ref{tab:rmse_imrpov} represents the overall estimation performance evaluated in RMSE for all models and the improvements achieved by ANN models compared with the baseline model. Although the improved proportions are different from the ones in MAPE, the overall trends of performance in RMSE are generally the same as the trends in MAPE regarding the changes made to the estimation model. However, one thing worth notice is that adding the additional source of traffic information, i.e., the travel time, into ANN models only achieves tiny improvements in RSME on the south road segment compared with their counterparts without it. For example, in table~\ref{tab:rmse_imrpov}, the ANN using both speed and travel time as independent variables only achieves 0.2\% more improvement, i.e., a decrement of 0.73 veh/h in RMSE, on the south segment than the ANN using speed as its sole information source. Moreover, the addition of travel time not constantly improves the ANN's estimation performance in RMSE on the north segment. It could slightly degrade the ANN's performance on the north segment compared with the ANN without using travel time as an additional information source.
+Table~\ref{tab:rmse_imrpov} represents the overall estimation performance evaluated in RMSE for all models and the improvements achieved by ANN models compared with the baseline model. Although the values of improvements are different from the ones in MAPE, the overall trends of performance changes in RMSE are generally the same as the trends in MAPE regarding the changes made to the estimation model. However, one thing worth notice is that adding an additional source of traffic information, i.e., the travel time, into ANN models does not constantly improve the ANN's estimation performance in RMSE on the north segment. It could slightly degrade the ANN's performance on the north segment compared with the ANN without using the travel time. For example, in table \ref{tab:rmse_imrpov}, the ANN using both speed and travel time as independent variables only achieves 6.0\% improvement of RMSE on the north segment, which exhibits a decrement of 1.5\% compared with the ANN using speed as its sole information source.
 
-Generally speaking, using the new ML technique, i.e., ANN, and incorporating additional dependencies, i.e., temporal dependency, spatial dependency, and travel time, into flow estimation improves the performance compared with the classic flow-speed relationship model. As we exhibited that improvements in MAPE can be as significant as 89.8\% on the south segment and 91.5\% on the north. The best performer, i.e., spatiotemporal ANN, achieves an improvement of 293 veh/h in RMSE (76.8\%) when being used for traffic flow estimation on the south segment and 335 veh/h (79.3\%) on the north segment over the baseline model. ANN models generally achieve more improvements on the north segment than on the south segment. However, notice that travel time as an additional information source contributes only tiny improvements in MAPE and could cause slight performance degradation on the north segment when evaluated using RMSE, which should be utilized with extra care.
+Generally speaking, using the new ML technique, i.e., ANN, and incorporating additional dependencies or information sources, i.e., temporal dependency, spatial dependency, and travel time, into flow estimation improves the performance compared with the classic flow-speed relationship model. As we exhibited that improvements in MAPE can be as significant as 89.8\% on the south segment and 91.5\% on the north. The best performer, i.e., spatiotemporal ANN, improves 293 veh/h in RMSE (76.8\%) when used for traffic flow estimation on the south segment and 335 veh/h (79.3\%) on the north segment over the baseline model. ANN models generally achieve more improvements on the north segment than on the south segment. However, notice that travel time as an additional information source contributes only tiny improvements and could cause slight performance degradation on the north segment when evaluated using RMSE, which should be utilized with extra care.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -1046,9 +1047,44 @@ On the other hand, the ANN model was trained on the south road segment's standar
 
 Figure \ref{subfig:relation_shift_ann_raw} shows the test samples on the two road segments and corresponding ANN model's estimations based on the actual speeds. The ANN model seems to adapt to the speed change under the free-flow regime and split into two flow-speed relationships to fit each segment's samples. In conclusion, standardization of features gives ANNs better resistance to speed differences between adjacent road segments. Although the ANN model is still far from a fully general model, it has better generality on neighboring road segments than the traditional flow-speed relationship.
 
-\subsection{Travel Time as an Additional Information Source}
+\subsection{Travel Time}
 \label{subsec:discussionTravelTime}
 
+As mentioned before, INRIX data, which is a kind of mobile data collected from probe vehicles, calculate the speed as the average speed of vehicles over a length of the road, which is called space mean speed \cite{sharma_inrix_data_opportunity, Ahsani_inrix_data_quantity}. Space mean speed can be calculated as following equation \cite{elefteriadou_traffic_flow_theory}:
+
+\begin{equation}
+    v_{avg} = \frac{d}{\frac{1}{n}\sum_{1}^{n}t_{i}}
+    \label{eq:sms}
+\end{equation}
+\begin{align*}
+    & d = the \ distance \ over \ which \ travel \ times \ were \ measured\\ 
+    & t_i = the \ travel \ time \ measured \ for \ the \ i^{th} \ vehicle
+\end{align*}
+
+The denominator in equation \ref{eq:sms} is the average travel time that vehicles take to travel across the road segment reported by the INRIX platform. Therefore, according to the equation, the INRIX speed and travel time are only two variables inversely proportional to each other. Figure \ref{fig:speed_vs_travel_time} shows the relationship between speed and travel time in the south segment's training dataset. Although there are some variations in the data, we can see that the relationship between speed and travel time is indeed an inverse proportion. Based on this fact, we did not expect that the travel time would provide additional helpful information than the speed in flow estimation.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{speed_vs_travel_time.png}
+    \caption{Relationship between speed and travel time in the training dataset from the south road segment.}
+    \label{fig:speed_vs_travel_time}
+\end{figure}
+
+However, adding travel time still improves the estimation performance slightly, as we demonstrated in section \ref{sec:trafficFlowEstimations}. One possible reason is that travel time as an additional feature may complement speed when the speed value is small. As shown in figure \ref{fig:speed_vs_travel_time}, when the speed is small, e.g., below 40 km/h, the speed changes are also small. On the other hand, changes in travel times under this regime are more pronounced, providing additional information for the model to recognize different traffic states and flows. Nevertheless, the improvement that travel time could bring is slight compared to other techniques such as temporal dependency.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{ttime_distribution_histogram.png}
+    \caption{Distributions of travel time in the test datasets before and after the standardization.}
+    \label{fig:travel_time_distribution_histogram}
+\end{figure}
+
+As we demonstrated in the result of flow estimation, travel time could sometimes worsen the model's performance on the adjacent road segment instead of improving it. After examining the datasets on the north segment between 1\textsuperscript{st} and 21\textsuperscript{nd} October, we found some severe congestions occurred on the north segment but not south. The severe congestions resulted in some high travel times, which could be as large as ten times the median travel time. The high values affect travel time's distribution on the north segment, leading to the different distributions between two road segments after the standardization. Because our ANN (speed, travel time) model was trained based on the standardized travel times from the south segment without experiencing severe congestions, there will be a slight mismatch between the trained ANN relationship and the north's relationship. This mismatch causes the performance deterioration on the north segment, similar to the baseline model case.  The difference is that this time the standardization cannot eliminate the fundamental difference in travel time distribution between two road segments caused by the congestions. Figure \ref{fig:travel_time_distribution_histogram} shows the distributions of travel times in both segments' test datasets before and after the standardization. As shown in the figure, the difference in travel time distribution between two road segments, i.e., the different standard deviations, still exists after the standardization.
+
+In contrast, speed as an information source for estimation is less affected by congestions. Theoretically, while the travel time could increase fast and unlimitedly as the congestion piles up, the speed changes relatively little and has a minimum value of 0 km/h. Therefore, the speed distribution is less affected by the congestions, and the standardized speeds are similar on the adjacent road segment, as shown in figure \ref{fig:distribution_histogram}. In conclusion, the speed is a better choice of information source for flow estimation than the travel time because the traffic flow relationship trained on the standardized speeds is less affected by the variations in traffic conditions, and it consistently fits the samples on different road segments.
+
+\subsection{Spatiotemporal ANN}
+\label{subsec:discussionSpatialDependency}
 
 \cleardoublepagepage
 
