@@ -377,29 +377,12 @@ The project has the following limitations because of the nature of data sources 
 
 \section{Structure of the thesis}
 \label{sec:structureOfThesis}
-The rest of the thesis is organized as follows: Chapter \ref{ch:background} presents the thesis project's background, including fundamental knowledge of TSE, machine learning methods used in this work, and related works. Chapter \ref{ch:methodologyAndDatasets} deals with the datasets and methods used to implement the traffic flow estimation approach, including the introduction of datasets, data preparation, model structures, and performance evaluation. Chapter \ref{ch:resultsAndDiscussion} details the results of the implementation and the evaluation of estimation models. We also discuss the results in chapter \ref{ch:resultsAndDiscussion}. Chapter \ref{ch:conclusionsAndFutureWork} gives the conclusion of the thesis as well as some suggestions for future works.
+The rest of the thesis is organized as follows: Chapter \ref{ch:background} presents the thesis project's background, including fundamental knowledge of TSE, machine learning methods used in this work, and related works. Chapter \ref{ch:methodologyAndDatasets} deals with the datasets and methods used to implement the traffic flow estimation approach, including the introduction of datasets, data preparation, model structures, and performance evaluation. Chapter \ref{ch:resultsAndDiscussions} details the results of the implementation and the evaluation of estimation models. We also discuss the results in chapter \ref{ch:resultsAndDiscussions}. Chapter \ref{ch:conclusionsAndFutureWork} gives the conclusion of the thesis as well as some suggestions for future works.
 
 \cleardoublepage
 \chapter{Background}
 \label{ch:background}
-This chapter provides users with background knowledge about the traffic state estimation, traffic state variables, sensor data, TSE approaches, fundamental diagrams, machine learning methods, as well as mathematical equations that are necessary for readers to understand this work. The chapter is composed of seven subsections corresponding to each topic, i.e., traffic state estimation, traffic state variables, sensor data types, TSE approaches, fundamental diagrams, machine learning methods, and related works in data-driven traffic flow estimation using mobile data.
-
-\section{Traffic State Estimation}
-\label{sec:tse}
-According to Seo et al. \cite{seo_tse}, \textit{“Traffic State Estimation refers to the process of inference of traffic state variables, namely flow (veh/h), density (veh/km), speed (km/h), and other equivalent variables, on road segments, using partially observed and noisy traffic data.”} As we mentioned in the introduction, accurate information of traffic state is essential for traffic control \cite{seo_tse}, traffic emission monitoring \cite{tsanakas_emission_estimation}, and the development of ITS \cite{seo_tse_xfcd}. However, traffic state variables are not observable everywhere and anytime on highway segments. We need to estimate the traffic state in the regions where traffic state variables are not observed or partially observed. 
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{tse_diagram.png}
-    \caption{Relation of traffic data and traffic state in the space-time domain. Adapted from \cite{seo_tse}.}
-    \label{fig:tse}
-\end{figure}
-
-Figure~\ref{fig:tse} is a conceptual diagram adapted from \cite{seo_tse}, which describes the traffic data, traffic state, and their relation in the time-space domain. Traffic state on highways can be represented by a subset of traffic variables, i.e., any two of three traffic state variables \cite{seo_tse}. In figure~\ref{fig:tse}, the traffic state is observable at the locations where stationary sensors are installed. However, stationary sensors are usually installed sparsely on highways due to cost reasons. In the regions outside stationary sensors' coverage, the yellow regions in figure~\ref{fig:tse}, traffic state variables are either unobserved or only partially observed through traffic data collected by other sensors, e.g., mobile devices. TSE aims to estimate the unobserved traffic state variables using partially observed traffic data in regions where stationary sensors are absent, e.g., the yellow region with the dashed boundary in figure~\ref{fig:tse} Besides, even at the locations where stationary sensors are installed, observed traffic data usually suffer from missing data points due to detector and communication malfunctions \cite{duan_dl_imputation, chen_imputation_regression}. Therefore, a type of TSE method called imputation is developed to estimate the missing data at locations where the traffic state is observed.
-
-Data in figure~\ref{fig:tse} can be categorized into two groups according to the time when they are collected. If the data is collected when the traffic state is to be estimated, it is called real-time data or streaming data \cite{seo_tse}. Real-time data includes all kinds of traffic data collected by various sensors from the estimation location and its neighboring locations. On the other hand, if the traffic data is collected for a long time before the moment of estimation, it is called historical data, which also includes various types of traffic data collected from locations of interest. All TSE methods use real-time data and estimation models to infer traffic state variables, but not every TSE needs historical data. Historical data is utilized to calibrate and develop estimation models by some TSE approaches, e.g., model-driven and data-driven approaches.
-
-Various traffic data measurements, e.g., stationary and mobile data, and various TSE approaches, e.g., model-driven, data-driven, and streaming-data-driven approaches, are used for estimating traffic state variables in the time-space regions of interest, which will be introduced in the later sections of this chapter. From now on, "time-space region/domain" and "spatiotemporal region/domain" will be used interchangeably.
+This chapter provides users with background knowledge about the data-driven traffic state/flow estimation in ITS, which includes traffic state variables, sensor data types, traffic state estimation, TSE approaches, fundamental diagrams, machine learning methods, and related research work in data-driven traffic state estimation and imputation, which are necessary for readers to understand this work. The chapter is composed of seven sections corresponding to each topic listed above.
 
 \section{Traffic State Variables}
 This section aims to provide necessary information about the fundamental traffic state variables that are widely used to assess the traffic state. From a macroscopic view, the state of traffic on highways can be represented by three fundamental variables, speed, flow, and density \cite{seo_tse, elefteriadou_traffic_flow_theory}. We often assess the traffic on highways by describing the movement of a group of vehicles as a stream flowing through the road segment at a macroscopic scale, rather than describing each vehicle's movement at a microscopic scale \cite{elefteriadou_traffic_flow_theory}. These three variables are therefore used to describe the traffic flow on highway segments. The definitions of the three variables are as follow:
@@ -427,6 +410,24 @@ The traffic measurement data, which can provide us with information on microscop
 \textbf{Mobile data} is collected by on-vehicle sensor systems, e.g., \gls{gps} and \gls{avi} \cite{seo_tse, tsanakas_emission_estimation, herrera_gps_mobile_century}, which have been widely adopted in recent years because of advances in the ICT. Vehicles with these on-vehicle sensors such as GPS in the navigation systems and RFID installed in license plates are usually referred to as the probe vehicles. On-vehicle sensors can measure probe vehicles' trajectories, which is the microscopic information describing each vehicle's behavior. Trajectory information from mobile data can also be aggregated to obtain the average speed and other traffic performance measures with a specific spatiotemporal resolution \cite{seo_tse, sharma_inrix_data_opportunity}. Mobile data typically can cover a spatial border region than stationary data because on-vehicle sensors are not confined in fixed locations like stationary sensors. However, it is challenging to estimate the flow and density solely based on mobile data without additional data sources because of the low penetration rate of probe vehicles \cite{tsanakas_emission_estimation}. Therefore, it is usually impossible to obtain a full subset of the traffic state variables, e.g., flow-speed or density-speed, from the mobile data. 
 
 The same type of traffic variable/data provided by different sensor systems could be different. For example, the average speed reported by INRIX, one of the major mobile data providers, is widely found to exhibit a bias and latency relative to the average speed reported by stationary sensors, e.g., loop detectors, at the same road segment because of reasons such as measurement techniques and speed calculation \cite{sharma_inrix_data_opportunity, kim_inrix_data_comparing}. Therefore, we should be careful about these differences when incorporating traffic data from various data sources into an estimation model or ITS.
+
+\section{Traffic State Estimation}
+\label{sec:tse}
+According to Seo et al. \cite{seo_tse}, \textit{“Traffic State Estimation refers to the process of inference of traffic state variables, namely flow (veh/h), density (veh/km), speed (km/h), and other equivalent variables, on road segments, using partially observed and noisy traffic data.”} As we mentioned in the introduction, accurate information of traffic state is essential for traffic control \cite{seo_tse}, traffic emission monitoring \cite{tsanakas_emission_estimation}, and the development of ITS \cite{seo_tse_xfcd}. However, traffic state variables are not observable everywhere and anytime on highway segments. We need to estimate the traffic state in the regions where traffic state variables are not observed or partially observed. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{tse_diagram.png}
+    \caption{Relation of traffic data and traffic state in the space-time domain. Adapted from \cite{seo_tse}.}
+    \label{fig:tse}
+\end{figure}
+
+Figure~\ref{fig:tse} is a conceptual diagram adapted from \cite{seo_tse}, which describes the traffic data, traffic state, and their relation in the time-space domain. Traffic state on highways can be represented by a subset of traffic variables, i.e., any two of three traffic state variables \cite{seo_tse}. In figure~\ref{fig:tse}, the traffic state is observable at the locations where stationary sensors are installed. However, stationary sensors are usually installed sparsely on highways due to cost reasons. In the regions outside stationary sensors' coverage, the yellow regions in figure~\ref{fig:tse}, traffic state variables are either unobserved or only partially observed through traffic data collected by other sensors, e.g., mobile devices. TSE aims to estimate the unobserved traffic state variables using partially observed traffic data in regions where stationary sensors are absent, e.g., the yellow region with the dashed boundary in figure~\ref{fig:tse} Besides, even at the locations where stationary sensors are installed, observed traffic data usually suffer from missing data points due to detector and communication malfunctions \cite{duan_dl_imputation, chen_imputation_regression}. Therefore, a type of TSE method called imputation is developed to estimate the missing data at locations where the traffic state is observed.
+
+Data in figure~\ref{fig:tse} can be categorized into two groups according to the time when they are collected. If the data is collected when the traffic state is to be estimated, it is called real-time data or streaming data \cite{seo_tse}. Real-time data includes all kinds of traffic data collected by various sensors from the estimation location and its neighboring locations. On the other hand, if the traffic data is collected for a long time before the moment of estimation, it is called historical data, which also includes various types of traffic data collected from locations of interest. All TSE methods use real-time data and estimation models to infer traffic state variables, but not every TSE needs historical data. Historical data is utilized to calibrate and develop estimation models by some TSE approaches, e.g., model-driven and data-driven approaches.
+
+Various traffic data measurements, e.g., stationary and mobile data, and various TSE approaches, e.g., model-driven, data-driven, and streaming-data-driven approaches, are used for estimating traffic state variables in the time-space regions of interest, which will be introduced in the later sections of this chapter. From now on, "time-space region/domain" and "spatiotemporal region/domain" will be used interchangeably.
+
 
 \section{Traffic State Estimation Approaches}
 \label{sec:tseApproaches}
@@ -988,7 +989,7 @@ Tables \ref{tab:mape_imrpov} shows the improvements of ANN models as compared wi
 
 Incorporating temporal factors into flow estimation improves the performance considerably. As shown in the table~\ref{tab:mape_imrpov}, the temporal ANN, which uses speed and time-related features, i.e., hour and day, as its independent variables, dramatically improves 88.3\% on the south segment and 88.7\% on the north segment over the baseline's performance. The temporal ANN's errors are nearly one-tenth of that in the baseline model for both segments (south MAPE = 11.54\%, north MAPE = 14.40\%). The result validates our hypothesis that incorporating temporal dependency into flow estimation provides more information to the ANN and better captures the dynamic flow-speed relationship that changes over time. The temporal ANN with travel time as its additional information source also shows a slight improvement over the temporal ANN without using the travel time, which is similar to the static ANN models. Notice that the performance differences between two adjacent road segments still exist when using temporal ANNs for estimation, but they are much smaller than those in the static ANN models.
 
-Finally, the spatiotemporal ANN, which incorporates speed and time-related and space-related features into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN's performance gap between the two road segments is small and negligible, as we expected. Because the spatiotemporal ANN is the only model trained on the data from both road segments, it learned the unique characteristics of traffic flow relationships belong to each segment and hence achieve a similar estimation performance on both segments.
+Finally, the spatiotemporal ANN, which incorporates speed and time-related and space-related features into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN's performance gap between the two road segments is small and negligible, as we expected. Notice that the spatiotemporal ANN is the only model trained on the data from both road segments. We will discuss more the spatial dependency and the benefits of using a spatiotemporal ANN in the discussion section.
 
 Table~\ref{tab:rmse_imrpov} represents the overall estimation performance evaluated in RMSE for all models and the improvements achieved by ANN models compared with the baseline model. Although the values of improvements are different from the ones in MAPE, the overall trends of performance changes in RMSE are generally the same as the trends in MAPE regarding the changes made to the estimation model. However, one thing worth notice is that adding an additional source of traffic information, i.e., the travel time, into ANN models does not constantly improve the ANN's estimation performance in RMSE on the north segment. It could slightly degrade the ANN's performance on the north segment compared with the ANN without using the travel time. For example, in table \ref{tab:rmse_imrpov}, the ANN using both speed and travel time as independent variables only achieves 6.0\% improvement of RMSE on the north segment, which exhibits a decrement of 1.5\% compared with the ANN using speed as its sole information source.
 
@@ -1085,6 +1086,25 @@ In contrast, speed as an information source for estimation is less affected by c
 
 \subsection{Spatiotemporal ANN}
 \label{subsec:discussionSpatialDependency}
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{spatiotemporal_ann_south.png}
+        \caption{Estimations and test samples on the south segment.}
+        \label{subfig:spatiotemporal_ann_south}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{spatiotemporal_ann_north.png}
+        \caption{Estimations and test samples on the north segment.}
+        \label{subfig:spatiotemporal_ann_north}
+    \end{subfigure}
+    \caption{Spatiotemporal ANN's flow estimations on the adjacent road segments.}
+    \label{fig:spatiotemporal_ann}
+\end{figure}
 
 \cleardoublepagepage
 
