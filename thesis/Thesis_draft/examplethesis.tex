@@ -40,7 +40,7 @@
 \usepackage{listings}		%% For source code listing
 \usepackage{bytefield}          %% For packet drawings
 \usepackage{tabularx}		%% For simple table stretching
-\usepackage{multirow}	        %% Support for multirow colums in tables
+\usepackage{multirow}	        %% Support for multirow columns in tables
 
 \usepackage{url}                %% Support for breaking URLs
 \usepackage{hyperref}
@@ -936,12 +936,12 @@ As mentioned in the previous section, the traffic condition depends on many fact
 \section{Traffic Flow Estimations}
 \label{sec:trafficFlowEstimations}
 
-Figure~\ref{fig:mape_histogram} represents the overview of the estimation results in MAPE for all models when validated on the south and north test datasets collected in a week, i.e., 22\textsuperscript{nd} to 29\textsuperscript{th}, following the training dataset, i.e., 1\textsuperscript{st} to 21\textsuperscript{st}. However, before we start digging into each model's performance and comparing it with the baseline model, we observe a common phenomenon in the overall performance. 
+Figure~\ref{fig:mape_histogram} represents the overview of the estimation performance in MAPE for all models when validated on the south and north test datasets collected in a week, i.e., 22\textsuperscript{nd} to 29\textsuperscript{th}, following the training dataset, i.e., 1\textsuperscript{st} to 21\textsuperscript{st}. However, before we start digging into each model's performance and comparing it with the baseline model, we observe a common phenomenon in the overall performance. 
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\textwidth]{mape_histogram.png}
-    \caption{Overview of the flow estimation results on the two consecutive road segments.}
+    \caption{Overview of the flow estimation performance on the two consecutive road segments.}
     \label{fig:mape_histogram}
 \end{figure}
 
@@ -989,7 +989,7 @@ Tables \ref{tab:mape_imrpov} shows the improvements of ANN models as compared wi
 
 Incorporating temporal factors into flow estimation improves the performance considerably. As shown in the table~\ref{tab:mape_imrpov}, the temporal ANN, which uses speed and time-related features, i.e., hour and day, as its independent variables, dramatically improves 88.3\% on the south segment and 88.7\% on the north segment over the baseline's performance. The temporal ANN's errors are nearly one-tenth of that in the baseline model for both segments (south MAPE = 11.54\%, north MAPE = 14.40\%). The result validates our hypothesis that incorporating temporal dependency into flow estimation provides more information to the ANN and better captures the dynamic flow-speed relationship that changes over time. The temporal ANN with travel time as its additional information source also shows a slight improvement over the temporal ANN without using the travel time, which is similar to the static ANN models. Notice that the performance differences between two adjacent road segments still exist when using temporal ANNs for estimation, but they are much smaller than those in the static ANN models.
 
-Finally, the spatiotemporal ANN, which incorporates speed and time-related and space-related features into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN's performance gap between the two road segments is small and negligible, as we expected. Notice that the spatiotemporal ANN is the only model trained on the data from both road segments. We will discuss more the spatial dependency and the benefits of using a spatiotemporal ANN in the discussion section.
+Finally, the spatiotemporal ANN, which incorporates time-related features, a space-related feature, and speed into flow estimation, achieves the best performance among all ANN models: a MAPE of 10.05\% on the south and a MAPE of 10.75\% on the north segment. It improves 89.8\% over the baseline model on the south and 91.5\% on the north. Spatiotemporal ANN not only has a negligible performance gap between the two road segments as we expected, but it also achieves a noticeable improvement on the south segment compared with the prior model scheme, i.e., temporal ANN (speed). Notice that the spatiotemporal ANN is the only model trained on the data from both road segments. We will discuss the spatial dependency and the benefits of using a spatiotemporal ANN in detail later.
 
 Table~\ref{tab:rmse_imrpov} represents the overall estimation performance evaluated in RMSE for all models and the improvements achieved by ANN models compared with the baseline model. Although the values of improvements are different from the ones in MAPE, the overall trends of performance changes in RMSE are generally the same as the trends in MAPE regarding the changes made to the estimation model. However, one thing worth notice is that adding an additional source of traffic information, i.e., the travel time, into ANN models does not constantly improve the ANN's estimation performance in RMSE on the north segment. It could slightly degrade the ANN's performance on the north segment compared with the ANN without using the travel time. For example, in table \ref{tab:rmse_imrpov}, the ANN using both speed and travel time as independent variables only achieves 6.0\% improvement of RMSE on the north segment, which exhibits a decrement of 1.5\% compared with the ANN using speed as its sole information source.
 
@@ -1084,8 +1084,10 @@ As we demonstrated in the result of flow estimation, travel time could sometimes
 
 In contrast, speed as an information source for estimation is less affected by congestions. Theoretically, while the travel time could increase fast and unlimitedly as the congestion piles up, the speed changes relatively little and has a minimum value of 0 km/h. Therefore, the speed distribution is less affected by the congestions, and the standardized speeds are similar on the adjacent road segment, as shown in figure \ref{fig:distribution_histogram}. In conclusion, the speed is a better choice of information source for flow estimation than the travel time because the traffic flow relationship trained on the standardized speeds is less affected by the variations in traffic conditions, and it consistently fits the samples on different road segments.
 
-\subsection{Spatiotemporal ANN}
+\subsection{Spatial Dependency}
 \label{subsec:discussionSpatialDependency}
+
+As we demonstrated in the flow estimation results, when we incorporated the spatial dependency into flow estimation, the performance gaps observed in all other estimation models between the south and north segments disappear. Because we trained the spatiotemporal ANN using data from both road segments and adopted a location feature for identifying each segment, the model could learn the unique characteristics of the time-varying traffic flow relationship on the north segment, just like it did on the south. Thus the spatiotemporal ANN achieves a consistent performance on both segments. 
 
 \begin{figure}[!ht]
     \centering
@@ -1102,9 +1104,20 @@ In contrast, speed as an information source for estimation is less affected by c
         \caption{Estimations and test samples on the north segment.}
         \label{subfig:spatiotemporal_ann_north}
     \end{subfigure}
-    \caption{Spatiotemporal ANN's flow estimations on the adjacent road segments.}
+    \caption{Spatiotemporal ANN's flow estimations on both road segments.}
     \label{fig:spatiotemporal_ann}
 \end{figure}
+
+However, to our surprise, considering the spatial dependency not only improves the performance on the adjacent road segment but also achieves a noticeable improvement on the south segment compared with the temporal ANN. For example, as shown in table MAPE and table RMSE, the spatiotemporal ANN achieves 1.6\% more improvement in MAPE and 2.2\% more improvements in RMSE on the south segment relative to the temporal ANN (speed), which does consider the spatial dependency. Our explanation for this improvement on the south segment is that the exploitation of data from multiple road segments may provide the ANN model with more traffic data patterns. That additional information helps the ANN learn a more comprehensive and universal flow-speed relationship and better estimate the traffic flows on the south segment than the model trained on data from only one segment. One indirect evidence for the explanation could be found in figure \ref{fig:spatiotemporal_ann}, which presents the spatiotemporal ANN's flow estimations and the test samples for both segments. Although there are deformation and position differences between the two estimations in the flow-speed diagrams, e.g., the relationship curve's height is smaller on the north segment than on the south. We can see that the time-varying flow-speed relationships given by the spatiotemporal ANN on both segments are very similar. Considering there are only 120 parameters corresponding to the model's location feature, the model cannot learn an entirely new time-varying relationship for each segment. Spatiotemporal ANN more likely learned a universal time-varying flow-speed relationship shared by both segments and captured each segment's relationship's unique characteristics according to their location feature, e.g., shorten the height of the relationship curve for the north segment. Thus more training data improves the universal relationship shared by both segments and further improves the model's performance on the south segment. Unfortunately, it is not easy to analyze how spatiotemporal ANN works internally and prove our explanation's correctness since the ANN is a black-box model.
+
+We can, of course, build and train many small ANN models for estimating flows on road segments in a network instead of building an ANN considering spatial dependency. However, spatiotemporal ANN shows the possibility of a central estimation model that learns the spatiotemporal dependencies for the entire road network and might provide some benefits over single segment models. First, it could reduce the number of estimation models needed by ITS for estimating the traffic flow in a road network. A central estimation model will have fewer parameters than the combination of many small models, a more efficient way to model the traffic dynamics in a transportation system with many road segments. Second, as we discussed above, training a model using data from multiple road segments might improve the overall performance on every road segment covered by the model compared with using data from a single road segment for training. Because the central estimation model is more complex than the single segment model, it might also suffer from long training and computational time. However, we need to validate spatiotemporal ANN's performance and benefits when building a central estimation model on a road network with many road segments via network-wide sensor data.
+
+\subsection{Usage of Models in Flow Estimation and Imputation}
+\label{subsec:discussionModelUsage}
+
+
+
+
 
 \cleardoublepagepage
 
