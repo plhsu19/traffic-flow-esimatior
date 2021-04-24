@@ -112,11 +112,11 @@
 %\selectlanguage{swedish}
 
 %% Information for inside title page
-\title{ML-Based Data-Driven Traffic Flow Estimation using Mobile Data}
+\title{ML-Based Data-Driven Traffic Flow Estimation from Mobile Data}
 % \subtitle{An subtitle in the language of the thesis}
 
 % give the alternative title - i.e., if the thesis is in English, then give a Swedish title
-\alttitle{Detta är den svenska översättningen av titeln}
+\alttitle{ML-baserad datadriven uppskattning av trafikflöden från mobila data}
 % \altsubtitle{Detta är den svenska översättningen av undertiteln}
 
 
@@ -124,7 +124,7 @@
 \email{plhsu@kth.se}
 
 
-\supervisor{Xiaoliang Ma, Ian Marsh}
+\supervisor{Ian Marsh, Xiaoliang Ma}
 \examiner{Erik Jenelius}
 \hostcompany{RISE SICS AB} % Remove this line if the project was not done at a host company
 %\hostorganization{CERN}   % if there was a host organization
@@ -147,36 +147,10 @@
 \setcounter{page}{1}
 \begin{abstract}
   \markboth{\abstractname}{}
-  \todo[inline]{The first abstract should be in the language of the thesis.}
-  \todo[inline, backgroundcolor=aqua]{Abstract fungerar på svenska också.}
-
-\todo[inline]{Keep in mind that most of your potential readers are only going to read your title and abstract. This is why it is important that the abstract give them enough information that they can decide is this document relevant to them or not. Otherwise the likely default choice is to ignore the rest of your document.\\
-A abstract should stand on its own, i.e., no citations, cross references to the body of the document, acronyms must be spelled out, …\\
-Write this early and revise as necessary. This will help keep you focused on what you are trying to do.}
-
-Write an abstract\todo{Use about 1/2 A4-page (250 and 350 words).}  with the following components:
-\begin{itemize}
-  \item What is the topic area? (optional) Introduces the subject area for the project.
-  \item Short problem statement
-  \item Why was this problem worth a Master’s thesis project? (i.e., why is the problem both significant and of a suitable degree of difficulty for a Master’s thesis project? Why has no one else solved it yet?)
-  \item How did you solve the problem? What was your method/insight?
-  \item Results/Conclusions/Consequences/Impact: What are your key results/conclusions? What will others do based upon your results? What can be done now that you have finished - that could not be done before your thesis project was completed?\todo[inline]{The presentation of the results should be the main part of the abstract.}
-\end{itemize}
+    Comprehensive information on traffic flow is essential for vehicular emission monitoring and traffic control. However, such information is not observable everywhere and anytime on the road because of high installation costs and malfunctions of stationary sensors. In order to compensate for stationary sensors' weakness, this thesis analyses an approach for inferring traffic flows from mobile data provided by INRIX, a commercial crowd-sourced traffic dataset with wide spatial coverage and high quality. The idea is to develop \gls{ann}-based models to automatically extract relations between traffic flow and INRIX measurements, e.g., speed and travel time, from historical data considering temporal and spatial dependencies. We conducted experiments using four weeks of data from INRIX and stationary sensors on two adjacent road segments on the E4 highway in Stockholm. Models are validated via traffic flow estimation based on one week of INRIX data. Compared with the traditional approach that fits the stationary flow-speed relationship based on the multi-regime model, the new approach greatly improves the estimation accuracy. Moreover, the results indicate that the new approach's models have better resistance to the drift of input variables and can decrease the deterioration of estimation accuracy on the road segment without a stationary sensor. Hence, the new approach may be more appropriate for estimating traffic flows on the nearby road segments of a stationary sensor. The approach provides a highly automated means to build models adaptive to datasets and improves estimation and imputation accuracy. It can also easily integrate new data sources to improve the models. Therefore, it is very suitable to be applied to \gls{its} for traffic monitor and control in the context of the \gls{iot} and Big Data.
 
 \subsection*{Keywords}
-5-6 keywords
-\todo[inline]{Choosing good keywords can help others to locate your paper, thesis, dissertation, … and related work.}
-Choose the most specific keyword from those used in your domain, see for example:
-ACM's Computing Classification System (2012)
-(2014) IEEE Taxonomy 
-Mechanics:
-\begin{itemize}
-  \item The first letter of a keyword should be set with a capital letter and proper names should be capitalized as usual.
-  \item Spell out acronyms and abbreviations.
-  \item Avoid "stop words" - as they generally carry little or no information.
-  \item List your keywords separated by commas (",").
-\end{itemize}    
-Since you should have both English and Swedish keywords - you might think of ordering them in corresponding order (i.e., so that the nth word in each list correspond) - thus it would be easier to mechanically find matching keywords.
+Intelligent transport systems, Traffic flow estimation, Machine learning, Artificial neural network, Mobile data, Imputation
 
 \end{abstract}
 \cleardoublepage
@@ -559,7 +533,7 @@ When compared with the imputation works, our approach could be regarded as a flo
 
 \chapter{Datasets and Methodology}
 \label{ch:methodologyAndDatasets}
-This chapter provides an overview of the datasets and the methods used in the thesis project. We first describe the two traffic datasets on which the project is built. The remaining sections then present the processes and techniques we adopted during the project's implementation, including data preparation, model training, and evaluation metrics.
+This chapter provides an overview of the datasets and the methods used in the thesis project. We first describe the two traffic datasets on which the project is built. The remaining sections then present the processes and techniques we adopted during the project's implementation, including data preparation, model structures and training, and evaluation metrics.
 
 \section{Datasets}
 \label{sec:datasets}
@@ -711,9 +685,9 @@ Various data exploration and preparation techniques are adopted to prepare the d
     \end{align*}
 \end{itemize}
 
-\section{Model Training}
-\label{sec:modelTraining}
-Our goal is to develop an approach that automatically finds relationships between observed variables in INRIX data and the flow in MCS data, which can later be used for estimating un-observed flow from the INRIX data collected in the future and the neighboring area. These relationships are the flow estimation models which we are going to train and test using prepared datasets. Two types of models are trained in this work: a multi-regime baseline model and ANN models. The multi-regime baseline model acts as a benchmark for comparison with the ANN models proposed, while ANN models are built for the purposes listed in section~\ref{sec:goalAndPurposes}. Two types of models are trained in this work: a multi-regime baseline model and ANN models.
+\section{Models}
+\label{sec:models}
+Our goal is to develop an approach that automatically finds relationships between observed variables in INRIX data and the flow in MCS data, which can later be used for estimating un-observed flow from the INRIX data collected in the future and the neighboring area. These relationships are the flow estimation models which we are going to train and test using prepared datasets. Two types of models are trained in this work: a multi-regime baseline model and ANN models. The multi-regime baseline model acts as a benchmark for comparison with the ANN models proposed, while ANN models are built for the purposes listed in section~\ref{sec:goalAndPurposes}.
 
 \subsection{Baseline Model}
 \label{subsec:baselineModel}
@@ -860,7 +834,7 @@ Figure~\ref{fig:smoothing} shows the time-series INRIX speed and MCS flow in 1\t
     \label{fig:smoothing}
 \end{figure}
 
-Figure~\ref{subfig:before_shifting} presents the INRIX speed and MCS speed versus epoch, i.e., cumulative time, based on their original timestamps. We can observe an approximate 6-minute latency of INRIX speed compared with the MCS speed from the figure, which is a common phenomenon reported by various studies related to the INRIX data [opportunity][KIM]. Since we aim to develop the relationship models that mapping the INRIX variables to the MCS flow and then use the models to estimate the traffic flow, we do not want any time difference between INRIX and MCS's observations. Therefore we shift the INRIX timestamps by 360 s to remove the time-lag between two measurements. Figure~\ref{subfig:after_shifting} presents the time-series INRIX and MCS speed after the timestamp shifting. We can see that the time-lag is disappeared, and the two curves overlap better after the shifting. By removing the latency, we ensure that both sensor platforms' measurements with the same timestamp reflect the same traffic condition at that moment.
+Figure~\ref{subfig:before_shifting} presents the INRIX speed and MCS speed versus epoch, i.e., cumulative time, based on their original timestamps. We can observe an approximate 6-minute latency of INRIX speed compared with the MCS speed from the figure, which is a common phenomenon reported by various studies related to the INRIX data \cite{kim_inrix_data_comparing, sharma_inrix_data_opportunity}. Since we aim to develop the relationship models that mapping the INRIX variables to the MCS flow and then use the models to estimate the traffic flow, we do not want any time difference between INRIX and MCS's observations. Therefore we shift the INRIX timestamps by 360 s to remove the time-lag between two measurements. Figure~\ref{subfig:after_shifting} presents the time-series INRIX and MCS speed after the timestamp shifting. We can see that the time-lag is disappeared, and the two curves overlap better after the shifting. By removing the latency, we ensure that both sensor platforms' measurements with the same timestamp reflect the same traffic condition at that moment.
 
 \begin{figure}[!ht]
     \centering
@@ -987,7 +961,7 @@ South & 98.73 & 92.36  & \textbf{6.4\%} & 91.68 & \textbf{7.1\%} & 11.54 & \text
 North & 127.00 & 106.05 & \textbf{16.5\%} & 103.83 & \textbf{18.2\%} & 14.40 & \textbf{88.7\%} & 12.73 & \textbf{90.0\%} & 10.75 & \textbf{91.5\%} \\
 \bottomrule
 \end{tabular}
-\caption{Improvements of flow estimation performance (MAPE) achieved by ANN models over the baseline model.}
+\caption{Improvements of flow estimation performance in MAPE achieved by ANN models over the baseline model.}
 \label{tab:mape_imrpov}
 
 \bigskip
@@ -1005,7 +979,7 @@ South & 380.98 & 373.56  & \textbf{1.9\%} & 372.83 & \textbf{2.1\%} & 96.81 & \t
 North & 423.15 & 391.53 & \textbf{7.5\%} & 397.97 & \textbf{6.0\%} & 120.02 & \textbf{71.6\%} & 104.36 & \textbf{75.3\%} & 87.71 & \textbf{79.3\%} \\
 \bottomrule
 \end{tabular}
-\caption{Improvements of flow estimation performance (RMSE) achieved by ANN models over the baseline model.}
+\caption{Improvements of flow estimation performance in RMSE achieved by ANN models over the baseline model.}
 \label{tab:rmse_imrpov}
 \end{sidewaystable}
 
@@ -1059,7 +1033,7 @@ Figure \ref{fig:estimation_week_south} presents the estimated flows using the te
 
 On the other hand, figure \ref{fig:estimation_week_north} shows the examples of the estimated flows and observed flows on the north road segment using the same temporal ANN. It is noticed that the model also works well most of the time on the north segment but tends to overestimate the traffic flow when the flow is near capacity. The deviation of the estimated flows from the observed flows near capacity is because of some difference in traffic flow characteristics between the two road segments. Although the two road segments are very close to each other and have similar traffic flow relationships, the north segment's capacity is slightly lower than the south segment's. The temporal ANN, which was trained using the data solely from the south segment, always estimates the north segment's flow based on the south segment's capacity. Thus, deviations of estimation flows were observed near the capacity on the north segment.
 
-Besides, we can observe that the curves of estimated flows are discontinuous at the transitions between hours because temporal ANN learned different traffic flow relationships to reflect the prevailing traffic condition in each hour. As we discussed in the section \ref{sec:modelTrainingResults}, using hours as thresholds to separate the traffic conditions is not a perfect method because traffic conditions are continuous rather than discrete and only change during hours. Moreover, incorporating hour segmentation as an explanatory variable into flow estimation may discretize the estimated values, especially when the traffic state changes sharply, for example, during the beginning of morning rush hours between 5 to 6 a.m. Nevertheless, as we demonstrated in this section, incorporating time of day and weekday as information into flow estimation is a practical method to improve the estimation accuracy on a road where the traffic conditions less change. Some more sophisticated time series methods in deep learning, e.g., LSTM, might solve the problems above when considering the temporal dynamics/relationship of the traffic states, which will be discussed as future works in the last chapter.
+Besides, we can observe that the curves of estimated flows are discontinuous at the transitions between hours because temporal ANN learned different traffic flow relationships to reflect the prevailing traffic condition in each hour. As we discussed in section \ref{sec:modelTrainingResults}, using hours as thresholds to separate the traffic conditions is not a perfect method because traffic conditions are continuous rather than discrete and only change between hours. Moreover, incorporating hour segmentation as an explanatory variable into flow estimation may discretize the estimated values, especially when the traffic state changes sharply, for example, during the beginning of morning rush hours between 5 to 6 a.m. Nevertheless, as we demonstrated in this section, incorporating time of day and weekday as information into flow estimation is a practical method to improve the estimation accuracy on a road where the traffic conditions less change. Some more sophisticated time series methods in deep learning, e.g., LSTM, might solve the problems above when considering the temporal correlations between traffic states. It will be discussed as future works in the last chapter.
 
 Generally speaking, using the new ML technique, i.e., ANN, and incorporating additional dependencies or information sources, i.e., temporal dependency, spatial dependency, and travel time, into flow estimation improves the performance compared with the classic flow-speed relationship model. As we exhibited that improvements in MAPE can be as significant as 89.8\% on the south segment and 91.5\% on the north. The best performer, i.e., spatiotemporal ANN, improves 293 veh/h in RMSE (76.8\%) when used for traffic flow estimation on the south segment and 335 veh/h (79.3\%) on the north segment over the baseline model. ANN models generally achieve more improvements on the north segment than on the south segment. However, notice that travel time as an additional information source contributes only tiny improvements and could cause slight performance degradation on the north segment when evaluated using RMSE, which should be utilized with extra care.
 
@@ -1067,8 +1041,8 @@ Generally speaking, using the new ML technique, i.e., ANN, and incorporating add
 \label{ch:discussion}
 This chapter analyzes and discusses some phenomena we observed in the results from the previous section. First of all, we will discuss why the ANN produces a better estimation performance on the adjacent road segment than the classic flow-speed relationship. Then we will discuss the role the travel time plays as an additional information source for flow estimation, e.g., why its benefit to the performance improvement is weak? Finally, we will shortly discuss what might happen when we incorporate spatial dependency into our ANN model and use data from multiple road segments for training. We also discuss what benefits it could bring us if we train a central estimation model that learns spatial dependency for the entire road network with many road segments.
 
-\section{ANN's Improved Performance on Adjacent Road Segment}
-\label{sec:discussionAdjacentSegment}
+\section{Input Speed Drift}
+\label{sec:discussionSpeedDrift}
 
 In the flow estimation results, the ANN using speed as the independent variable improves more performance, i.e., larger than 10\%, on the north segment than on the south segment. The result implies that the ANN model's performance degradation on the adjacent road segment is less severe than the baseline model's degradation. If a model can perform well on the road segments from which it has never seen data during the model training, we say it has good generality. Good generality of an estimation model is preferable because one of our goals is to use the model to estimate unobserved traffic flow on the road segments near the one where the model was trained. 
 
@@ -1079,7 +1053,7 @@ In the flow estimation results, the ANN using speed as the independent variable 
     \label{fig:distribution_histogram}
 \end{figure}
 
-However, why ANN model can perform more consistently on both road segments than the baseline model? We believe it is because ANN was trained on the scaled traffic variables rather than on traffic variables' original values. Remember the results of data preparation from the figure \ref{fig:standardization_boxplots}, the median speeds on the north segment are slower than the south segment. Figure \ref{fig:distribution_histogram} shows the speed distributions before and after the standardization in the training and test datasets for the baseline and ANN (speed) model. We can see in the figure that the distribution of speed on the north segment slightly shifts from the south segment's speed distribution to the left under the free-flow regime. The difference in free-flow speed between different road segments could be caused by many reasons, e.g., varying speed limits on different links \cite{neumann_bayesian}.
+However, why ANN model can perform more consistently on both road segments than the baseline model? We believe it is because ANN was trained on the scaled traffic variables rather than on traffic variables' original values. Remember the results of data preparation from the figure \ref{fig:standardization_boxplots}, the median speeds on the north segment are slower than the south segment. Figure \ref{fig:distribution_histogram} shows the speed distributions before and after the standardization in the training and test datasets for the baseline and ANN (speed) model. We can see that the distribution of speed on the north segment slightly drifts towards the left under the free-flow regime. Many reasons could cause the drift of free-flow speed between different road segments, e.g., varying speed limits on different links \cite{neumann_bayesian}.
 
 
 One reason for the baseline model's more severe performance degradation on the north segment is that we directly feed the north segment's speed into the flow-speed relationship as the evidence speed during the flow estimation. Notice that the flow-speed relationship in the baseline model was calibrated based on the south segment's speeds. The difference in speed distribution between two road segments could lead to the mismatch between the baseline flow-speed relationship and the flow-speed relationship lying in the samples observed on the north segment.
@@ -1091,9 +1065,9 @@ One reason for the baseline model's more severe performance degradation on the n
     \label{fig:relation_shift_baseline}
 \end{figure}
 
-Figure \ref{fig:relation_shift_baseline} shows the test data from both segments and the flow estimations produced by the baseline model based on the corresponding speeds. As shown in the figure, the baseline model uses the same flow-speed relationship, which was calibrated using the training speed from the south, to estimate the flow on both segments. However, since the flow-speed relationship lying in the north segment's test samples, which are brown circles, shifts to the left compared with the south segment's flow-speed relationship, the baseline relationship does not suit the actual relationship on the north segment as on the south segment. The baseline, therefore, suffers from a more noticeable performance degradation on the north segment.
+Figure \ref{fig:relation_shift_baseline} shows the test data from both segments and the flow estimations produced by the baseline model based on the corresponding speeds. As shown in the figure, the baseline model uses the same flow-speed relationship, which was calibrated using the training speed from the south, to estimate the flow on both segments. However, since the flow-speed relationship lying in the north segment's test samples, which are brown circles, drifts to the left compared with the south segment's flow-speed relationship, the baseline relationship does not suit the actual relationship on the north segment as on the south segment. The baseline, therefore, suffers from a more noticeable performance degradation on the north segment.
 
-On the other hand, the ANN model was trained on the south road segment's standardized speed. As mentioned before, we standardized the test datasets' speeds by subtracting the historical mean value, which was obtained from the training dataset on the same road segment, from the original speed values, then dividing the values by the historical standard deviation. As shown in the figure \ref{fig:distribution_histogram}, the distribution of standardized speeds on the north segment becomes similar to the south segment's speed distributions. The difference in speed between two segments under the free-flow regime is disappeared. Figure \ref{subfig:relation_shift_ann_standardized} shows the test samples from both segments and the corresponding flow estimations produced by the ANN model, all based on the standardized speeds. We can see that the relationships between flow and standardized speed on the neighboring road segments are similar. The ANN relationship trained on the south segment's standardized speed could also fit the relationship between flow and standardized speed on its adjacent road segments.  
+On the other hand, the ANN model was trained on the south road segment's standardized speed. As mentioned before, we standardized the test datasets' speeds by subtracting the historical mean value, which was obtained from the training dataset on the same road segment, from the original speed values, then dividing the values by the historical standard deviation. As shown in the figure \ref{fig:distribution_histogram}, the distribution of standardized speeds on the north segment becomes similar to the south segment's speed distributions. The speed drift under the free-flow regime is disappeared. Figure \ref{subfig:relation_shift_ann_standardized} shows the test samples from both segments and the corresponding flow estimations produced by the ANN model, all based on the standardized speeds. We can see that the relationships between flow and standardized speed on the neighboring road segments are similar. The ANN relationship trained on the south segment's standardized speed could also fit the relationship between flow and standardized speed on its adjacent road segments.  
 
 \begin{figure}[!ht]
     \centering
@@ -1114,7 +1088,7 @@ On the other hand, the ANN model was trained on the south road segment's standar
     \label{fig:relation_shift_ann}
 \end{figure}
 
-Figure \ref{subfig:relation_shift_ann_raw} shows the test samples on the two road segments and corresponding ANN model's estimations based on the actual speeds. The ANN model seems to adapt to the speed change under the free-flow regime and split into two flow-speed relationships to fit each segment's samples. In conclusion, standardization of features gives ANNs better resistance to speed differences between adjacent road segments. Although the ANN model is still far from a fully general model, it has better generality on neighboring road segments than the traditional flow-speed relationship.
+Figure \ref{subfig:relation_shift_ann_raw} shows the test samples on the two road segments and corresponding ANN model's estimations based on the actual speeds. The ANN model seems to adapt to the speed drift under the free-flow regime and split into two flow-speed relationships to fit each segment's samples. In conclusion, standardization of features gives ANNs better resistance to speed differences between adjacent road segments. Although the ANN model is still far from a fully general model, it has better generality on neighboring road segments than the traditional flow-speed relationship.
 
 \section{Travel Time}
 \label{sec:discussionTravelTime}
@@ -1180,7 +1154,7 @@ However, to our surprise, considering the spatial dependency not only improves t
 
 We can, of course, build and train many small ANN models for estimating flows on road segments in a network instead of building an ANN considering spatial dependency. However, spatiotemporal ANN shows the possibility of a central estimation model that learns the spatiotemporal dependencies for the entire road network and might provide some benefits over single segment models. First, it could reduce the number of estimation models needed by ITS for estimating the traffic flow in a road network. A central estimation model will have fewer parameters than the combination of many small models, a more efficient way to model the traffic dynamics in a transportation system with many road segments. Second, as we discussed above, training a model using data from multiple road segments might improve the overall performance on every road segment covered by the model compared with using data from a single road segment for training. Because the central estimation model is more complex than the single segment model, it might also suffer from long training and computational time. However, we need to validate spatiotemporal ANN's performance and benefits when building a central estimation model on a road network with many road segments via network-wide sensor data.
 
-\section{Usage of Estimation Model and Model Update}
+\section{Model Usage and Update}
 \label{sec:discussionModelUsage}
 
 Finally, we shortly discuss the use of ANN models proposed in this work for flow estimation/imputation and the update of models over time. 
@@ -1222,20 +1196,21 @@ Although the ANN-based approach proposed in this work might provide little insig
 
 In this section, we discuss some possible directions for future researches as an extension of this thesis.
 
-\subsection{Using Spatial-Temporal Correlations}
+\subsection{Spatial-Temporal Correlations}
 Mining spatial and temporal information in the spatial-temporal correlation datasets is a prevalent topic in traffic data imputation and prediction. Like we mentioned in the delimitation of the thesis in Chapter \ref{ch:introduction}, we did not use the temporal and spatial correlation between neighboring data points in the time-space domain for traffic flow estimation and imputation. We did capture the traffic condition's dependency on the hour/weekday and location in the historical data and used this information to inference the traffic flow based on the real-time INRIX measures. However, more information is hidden in an unobserved/missing data point's neighboring data in the time-space domain. For example, a road segment's traffic flow could be heavily affected by the traffic conditions from its upstream and downstream road segments.
 
 Moreover, traffic flow in a time slice could have strong correlations with traffic conditions in its previous and later few time slices. Therefore, full use of spatial-temporal information could help us improve the accuracy of traffic flow estimation, imputation, or prediction. One possible direction for future research is to collect a comprehensive dataset containing INRIX and MCS data collected from many road segments on the road or in a road network during an extended period. Then, one could use sophisticated deep learning methods such as \gls{rnn}, CNN, or \gls{gcn} to extract the temporal and spatial correlations between traffic flow and INRIX's measures from the dataset containing rich spatial-temporal information. The extracted spatial-temporal correlations and real-time INRIX measures could be solely used for estimating the traffic flow on a road segment, like what we did in this work, or could be used together with other fixed sensor data for estimating, imputing, or predicting the traffic flow.
 
-\subsection{Traffic Flow Forecasting}
+\subsection{Traffic Flow Prediction}
 Predicting short-term traffic flow is a challenging but more valuable task for traffic control ITS and transportation planning. Therefore, one possible future direction is extending the approach proposed in this thesis to work for traffic flow forecasting. Most studies use features solely from the fixed-location sensor's measures to predict traffic flow to the best of the author's knowledge. At the same time, very few of them took alternative data sources, e.g., mobile data, into account when it comes to traffic prediction. The quickest way to extend our approach for traffic forecasting is using flows in the short-term future, e.g., 15 minutes, as labels to train our ANN models, and then using the models to predict the traffic flow based on the current INRIX measures. 
 
 However, a typical prediction approach will be extracting the temporal correlations from the historical data using some time-series models, e.g., RNN or \gls{lstm}, and then using the extracted correlation for prediction based on the recent INRIX data from the current and previous time slices. Some recent studies also captured the spatial correlation and the temporal correlation using GCN to make full use of both spatial and temporal information in a road network for traffic forecasting \cite{zhang_gcn_prediction}. No matter which method one uses to extract the temporal and/or spatial correlations between INRIX measures and the traffic flow, INRIX data as an additional information source should help improve the prediction accuracy when used together with the typical fixed sensor's measures. Besides, we could also use INRIX alone for predicting the short-term traffic flow when other data sources are not available, e.g., the fixed detector malfunctions.
 
 \subsection{Others}
-One could make other improvements in future studies. In the data preparation part of this work, we removed INRIX speed's time-lag by shifting its time-series curve by a time slice and examined if it overlapped with MCS's curve iteratively until the two curves were overlapped. In the future, one could use Fourier analysis to decide the value of timestamps to be shifted to ensure two time-series curves overlap with each other accurately. Finally, as we mentioned, traffic conditions and traffic flow relationships are influenced by many factors, e.g., number of lanes, weather, special event, road surface, road's geometric alignment, and much more. In future works, one could take into account more influencing factors to improve model's estimation accuracy. Moreover, one might develop a genuinely general model that can estimate traffic flow on all road segments in a road network by incorporating all essential influencing factors into the estimation.
+One could make other improvements in future studies. In the data preparation part of this work, we removed INRIX speed's time-lag by shifting its time-series curve by a time slice and examined if it overlapped with MCS's curve iteratively until the two curves were overlapped. In the future, one could use Fourier analysis to decide the value of timestamps to be shifted to ensure two time-series curves overlap with each other accurately. Finally, as we mentioned, traffic conditions and traffic flow relationships are influenced by many factors, e.g., number of lanes, weather, special event, road surface, road's geometric alignment, and much more. In future works, one could consider more influencing factors and more data sources, e.g., extended floating car data, to improve the model's estimation accuracy. Moreover, one might develop a genuinely general model that can estimate traffic flow on all road segments in a road network by incorporating most of the essential influencing factors into the estimation.
 
 \cleardoublepage
+
 % Print the bibliography (and make it appear in the table of contents)
 %\printbibliography[heading=bibintoc]
 % The lines below are for BibTeX
