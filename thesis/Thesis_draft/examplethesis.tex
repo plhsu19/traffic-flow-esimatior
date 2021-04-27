@@ -159,19 +159,11 @@ Intelligent transport systems, Traffic flow estimation, Machine learning, Artifi
 \begin{otherlanguage}{swedish}
   \begin{abstract}
     \markboth{\abstractname}{}
-    \todo[inline]{All theses at KTH are required to have an abstract in both English and Swedish.\\
-If you are writing your thesis in English, you can leave this until the final version. If you are writing your thesis in Swedish then this should be done first – and you should revise as necessary along the way.\\
-If you are writing your thesis in English, then this section can be a summary targeted at a more general reader. However, if you are writing your thesis in Swedish, then the reverse is true – your abstract should be for your target audience, while an English summary can be written targeted at a more general audience.\\
-This means that the English abstract and Swedish sammnfattning  
-or Swedish abstract and English summary need not be literal translations of each other.\\
+Omfattande information om trafikflödet är nödvändig för övervakning av fordonsutsläpp och trafikstyrning. Sådan information kan dock inte observeras överallt och när som helst på vägen på grund av höga installationskostnader och funktionsstörningar hos stationära sensorer. För att kompensera för stationära sensorers svagheter analyseras i denna avhandling ett tillvägagångssätt för att härleda trafikflöden från mobila data som tillhandahålls av INRIX, en kommersiell trafikdataset som tillhandahålls av allmänheten och som har en bred rumslig täckning och hög kvalitet. Tanken är att utveckla modeller baserade på artificiellt neuronnät för att automatiskt extrahera relationer mellan trafikflöden och INRIX-mätningar, t.ex. hastighet och restid, från historiska data med hänsyn till tidsmässiga och rumsliga beroenden. Vi utförde experiment med fyra veckors data från INRIX och stationära sensorer på två intilliggande vägsegment på E4:an i Stockholm. Modellerna valideras via uppskattning av trafikflödet baserat på en veckas INRIX-data. Jämfört med det traditionella tillvägagångssättet som anpassar det stationära sambandet mellan flöde och hastighet baserat på multiregimmodellen, förbättrar det nya tillvägagångssättet noggrannheten avsevärt. Dessutom visar resultaten att modellerna i den nya metoden är bättre motståndskraftiga mot avvikelser i ingående variabler och kan minska försämringen av noggrannheten på vägsegmentet utan stationär sensor. Den nya metoden kan därför vara lämpligare för att uppskatta trafikflöden på de närliggande vägsegmenten med en stationär sensor. Metoden ger ett mycket automatiserat sätt att bygga modeller som är anpassade till datamängder och förbättrar noggrannheten vid uppskattning och imputering av trafikflöden. Den kan också enkelt integrera nya datakällor för att förbättra modellerna. Den är därför mycket lämplig att tillämpa på intelligenta transportsystem för trafikövervakning och trafikstyrning i samband med sakernas internet och big data.
 
-The abstract in the language used for the thesis should be the first abstract, while the Summary/Sammanfattning in the other language can follow.\\
-
-Exchange students many want to include one or more abstracts in the language(s) used in their home institutions to avoid the neeed to write another thesis when returing to their home institution.
-}
 
 \subsection*{Nyckelord}
-5-6 nyckelord\todo{Nyckelord som beskriver innehållet i uppsatsrapporten}
+Intelligenta transportsystem, Uppskattning av trafikflödet, Maskininlärning, Artificiellt neuronnät, Mobila data, Imputering
 
 
   \end{abstract}
@@ -352,7 +344,7 @@ The project has the following limitations because of the nature of data sources 
 
 \section{Structure of the thesis}
 \label{sec:structureOfThesis}
-The rest of the thesis is organized as follows: Chapter \ref{ch:background} presents the thesis project's background, including fundamental knowledge of TSE, and the machine learning methods used in this work. Chapter \ref{ch:relatedWorks} presents the related works in data-driven TSE using probe vehicle data as well as works in traffic data imputation. Chapter \ref{ch:methodologyAndDatasets} deals with the datasets and methods used to implement the traffic flow estimation approach, including the introduction of datasets, data preparation, model structures, and performance evaluation. Chapter \ref{ch:results} details the results of the implementation and the evaluation of estimation models. We also analyze and discuss the results in chapter \ref{ch:discussion}. Chapter \ref{ch:conclusionAndFutureWork} gives the conclusion of the thesis as well as some suggestions for future works.
+The rest of the thesis is organized as follows: Chapter \ref{ch:background} presents the thesis project's background, including fundamental knowledge of TSE, and the machine learning methods used in this work. Chapter \ref{ch:relatedWorks} presents the related work in data-driven TSE using probe vehicle data as well as works in traffic data imputation. Chapter \ref{ch:methodologyAndDatasets} deals with the datasets and methods used to implement the traffic flow estimation approach, including the introduction of datasets, data preparation, model structures, and performance evaluation. Chapter \ref{ch:results} details the results of the implementation and the evaluation of estimation models. We also analyze and discuss the results in chapter \ref{ch:discussion}. Chapter \ref{ch:conclusionAndFutureWork} gives the conclusion of the thesis as well as some suggestions for future works.
 
 \cleardoublepage
 \chapter{Background}
@@ -504,7 +496,7 @@ To learn neural network's model parameters, i.e., $\mathbf{W}$ and $\mathbf{b}$ 
 
 Neural networks are non-parametric machine learning models that are powerful to learn highly nonlinear relationships in high-dimensional data \cite{vlahogianni_forecast_overview, ma_lstm_predict}, which is suitable to model complex relationships lying in transportation datasets. Because of their advantages and ability to make accurate predictions, neural networks are widely used in scientific and industrial applications, e.g., computer vision, natural language processing, and transportation applications such as traffic forecasting.
 
-\chapter{Related Works}
+\chapter{Related Work}
 \label{ch:relatedWorks}
 
 This chapter introduces related studies in data-driven traffic flow estimation using mobile data and the works in traffic data imputation.
@@ -1154,7 +1146,7 @@ However, to our surprise, considering the spatial dependency not only improves t
 
 We can, of course, build and train many small ANN models for estimating flows on road segments in a network instead of building an ANN considering spatial dependency. However, spatiotemporal ANN shows the possibility of a central estimation model that learns the spatiotemporal dependencies for the entire road network and might provide some benefits over single segment models. First, it could reduce the number of estimation models needed by ITS for estimating the traffic flow in a road network. A central estimation model will have fewer parameters than the combination of many small models, a more efficient way to model the traffic dynamics in a transportation system with many road segments. Second, as we discussed above, training a model using data from multiple road segments might improve the overall performance on every road segment covered by the model compared with using data from a single road segment for training. Because the central estimation model is more complex than the single segment model, it might also suffer from long training and computational time. However, we need to validate spatiotemporal ANN's performance and benefits when building a central estimation model on a road network with many road segments via network-wide sensor data.
 
-\section{Model Usage and Update}
+\section{Model Usage and updates}
 \label{sec:discussionModelUsage}
 
 Finally, we shortly discuss the use of ANN models proposed in this work for flow estimation/imputation and the update of models over time. 
