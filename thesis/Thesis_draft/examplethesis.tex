@@ -112,11 +112,11 @@
 %\selectlanguage{swedish}
 
 %% Information for inside title page
-\title{ML-Based Data-Driven Traffic Flow Estimation from Mobile Data}
+\title{Machine Learning-Based Data-Driven Traffic Flow Estimation from Mobile Data}
 % \subtitle{An subtitle in the language of the thesis}
 
 % give the alternative title - i.e., if the thesis is in English, then give a Swedish title
-\alttitle{ML-baserad datadriven uppskattning av trafikflöden från mobila data}
+\alttitle{Maskininlärningsbaserad datadriven uppskattning av trafikflöden från mobila data}
 % \altsubtitle{Detta är den svenska översättningen av undertiteln}
 
 
@@ -125,7 +125,7 @@
 
 
 \supervisor{Ian Marsh, Xiaoliang Ma}
-\examiner{Erik Jenelius}
+\examiner{Viktoria Fodor, Erik Jenelius}
 \hostcompany{RISE SICS AB} % Remove this line if the project was not done at a host company
 %\hostorganization{CERN}   % if there was a host organization
 
@@ -147,10 +147,12 @@
 \setcounter{page}{1}
 \begin{abstract}
   \markboth{\abstractname}{}
-    Comprehensive information on traffic flow is essential for vehicular emission monitoring and traffic control. However, such information is not observable everywhere and anytime on the road because of high installation costs and malfunctions of stationary sensors. In order to compensate for stationary sensors' weakness, this thesis analyses an approach for inferring traffic flows from mobile data provided by INRIX, a commercial crowd-sourced traffic dataset with wide spatial coverage and high quality. The idea is to develop \gls{ann}-based models to automatically extract relations between traffic flow and INRIX measurements, e.g., speed and travel time, from historical data considering temporal and spatial dependencies. We conducted experiments using four weeks of data from INRIX and stationary sensors on two adjacent road segments on the E4 highway in Stockholm. Models are validated via traffic flow estimation based on one week of INRIX data. Compared with the traditional approach that fits the stationary flow-speed relationship based on the multi-regime model, the new approach greatly improves the estimation accuracy. Moreover, the results indicate that the new approach's models have better resistance to the drift of input variables and can decrease the deterioration of estimation accuracy on the road segment without a stationary sensor. Hence, the new approach may be more appropriate for estimating traffic flows on the nearby road segments of a stationary sensor. The approach provides a highly automated means to build models adaptive to datasets and improves estimation and imputation accuracy. It can also easily integrate new data sources to improve the models. Therefore, it is very suitable to be applied to \gls{its} for traffic monitor and control in the context of the \gls{iot} and Big Data.
+Comprehensive information on traffic flow is essential for vehicular emission monitoring and traffic control. However, such information is not observable everywhere and anytime on the road because of high installation costs and malfunctions of stationary sensors. In order to compensate for stationary sensors' weakness, this thesis analyses an approach for inferring traffic flows from mobile data provided by INRIX, a commercial crowd-sourced traffic dataset with wide spatial coverage and high quality. The idea is to develop \gls{ann}-based models to automatically extract relations between traffic flow and INRIX measurements, e.g., speed and travel time, from historical data considering temporal and spatial dependencies. 
+
+We conducted experiments using four weeks of data from INRIX and stationary sensors on two adjacent road segments on the E4 highway in Stockholm. Models are validated via traffic flow estimation based on one week of INRIX data. Compared with the traditional approach that fits the stationary flow-speed relationship based on the multi-regime model, the new approach greatly improves the estimation accuracy. Moreover, the results indicate that the new approach's models have better resistance to the drift of input variables and can decrease the deterioration of estimation accuracy on the road segment without a stationary sensor. Hence, the new approach may be more appropriate for estimating traffic flows on the nearby road segments of a stationary sensor. The approach provides a highly automated means to build models adaptive to datasets and improves estimation and imputation accuracy. It can also easily integrate new data sources to improve the models. Therefore, it is very suitable to be applied to \gls{its} for traffic monitor and control in the context of the \gls{iot} and Big Data.
 
 \subsection*{Keywords}
-Intelligent transport systems, Traffic flow estimation, Machine learning, Artificial neural network, Mobile data, Imputation
+Intelligent transport systems, Traffic flow estimation, Machine learning, Artificial neural network, Mobile data
 
 \end{abstract}
 \cleardoublepage
@@ -159,11 +161,13 @@ Intelligent transport systems, Traffic flow estimation, Machine learning, Artifi
 \begin{otherlanguage}{swedish}
   \begin{abstract}
     \markboth{\abstractname}{}
-Omfattande information om trafikflödet är nödvändig för övervakning av fordonsutsläpp och trafikstyrning. Sådan information kan dock inte observeras överallt och när som helst på vägen på grund av höga installationskostnader och funktionsstörningar hos stationära sensorer. För att kompensera för stationära sensorers svagheter analyseras i denna avhandling ett tillvägagångssätt för att härleda trafikflöden från mobila data som tillhandahålls av INRIX, en kommersiell trafikdataset som tillhandahålls av allmänheten och som har en bred rumslig täckning och hög kvalitet. Tanken är att utveckla modeller baserade på artificiellt neuronnät för att automatiskt extrahera relationer mellan trafikflöden och INRIX-mätningar, t.ex. hastighet och restid, från historiska data med hänsyn till tidsmässiga och rumsliga beroenden. Vi utförde experiment med fyra veckors data från INRIX och stationära sensorer på två intilliggande vägsegment på E4:an i Stockholm. Modellerna valideras via uppskattning av trafikflödet baserat på en veckas INRIX-data. Jämfört med det traditionella tillvägagångssättet som anpassar det stationära sambandet mellan flöde och hastighet baserat på multiregimmodellen, förbättrar det nya tillvägagångssättet noggrannheten avsevärt. Dessutom visar resultaten att modellerna i den nya metoden är bättre motståndskraftiga mot avvikelser i ingående variabler och kan minska försämringen av noggrannheten på vägsegmentet utan stationär sensor. Den nya metoden kan därför vara lämpligare för att uppskatta trafikflöden på de närliggande vägsegmenten med en stationär sensor. Metoden ger ett mycket automatiserat sätt att bygga modeller som är anpassade till datamängder och förbättrar noggrannheten vid uppskattning och imputering av trafikflöden. Den kan också enkelt integrera nya datakällor för att förbättra modellerna. Den är därför mycket lämplig att tillämpa på intelligenta transportsystem för trafikövervakning och trafikstyrning i samband med sakernas internet och big data.
+Information om trafikflödet är nödvändig för övervakning av fordonsutsläpp och trafikstyrning. Trafikflöden kan dock inte observeras överallt och när som helst på vägen på grund av höga installationskostnader och t.ex. funktionsstörningar hos stationära sensorer. För att kompensera för stationära sensorers svagheter analyseras i detta arbete ett tillvägagångssätt för att estimera trafikflöden från mobila data som tillhandahålls av INRIX. Detta kommersiella dataset innehåller restider som kommer från användare av bl.a. färdnavigatorer i fordon och som har en bred rumslig täckning och hög kvalitet. Idén är att utveckla modeller baserade på artificiellt neuronnät för att automatiskt extrahera samband mellan trafikflödesdata och restidsdata från INRIX-mätningarna baserat på historiska data och med hänsyn till tidsmässiga och rumsliga beroenden.
+ 
+Vi utförde experiment med fyra veckors data från INRIX och från stationära sensorer på två intilliggande vägsegment på E4:an i Stockholm. Modellerna valideras med hjälp av estimering av trafikflöde baserat på en veckas INRIX-data. Jämfört med det traditionella tillvägagångssättet som anpassar stationära samband mellan trafikflöde och hastighet baserat på fundamentaldiagram, förbättrar det nya tillvägagångssättet noggrannheten avsevärt. Dessutom visar resultaten att modellerna i den nya metoden bättre hanterar avvikelser i ingående variabler och kan öka noggrannheten på estimatet för vägsegmentet utan stationär sensor. Den nya metoden kan därför vara lämplig för att uppskatta trafikflöden på vägsegment närliggande en stationär sensor. Metodiken ger ett automatiserat sätt att bygga modeller som är anpassade till datamängderna och som förbättrar noggrannheten vid estimering av trafikflöden. Den kan också enkelt integrera nya datakällor. Metodiken är lämplig att tillämpa på tillämpningar inom intelligenta transportsystem för trafikövervakning och trafikstyrning.
 
 
 \subsection*{Nyckelord}
-Intelligenta transportsystem, Uppskattning av trafikflödet, Maskininlärning, Artificiellt neuronnät, Mobila data, Imputering
+Intelligenta transportsystem, Estimering av trafikflöde, Maskininlärning, Artificiellt neuronnät, Mobila data
 
 
   \end{abstract}
@@ -328,7 +332,7 @@ The thesis's main contributions to the research area of traffic flow estimation,
 
 
 \section{Research Methodology and Ethics}
-This thesis project adopted a mixture of quantitative and qualitative research methods, i.e., triangulation research method \cite{hakansson_research_method}. As we aim to develop ANN-based traffic estimation models using training datasets and validate the models on test datasets by numerical metrics, it satisfies the description of Quantitative Research Method, which according to Håkansson is “The method requires large datasets and use statistics to test the hypothesis and make the research project valid” \cite{hakansson_research_method}. On the other hand, we performed the explorative analysis to understand the characteristics of variables/features in traffic datasets and use them to improve our ANN models, which belongs to the Qualitative Research method.
+This thesis project adopted a quantitative research method \cite{hakansson_research_method}. As we aim to develop ANN-based traffic estimation models using training datasets and validate the models on test datasets by numerical metrics, it satisfies the description of Quantitative Research Method, which according to Håkansson is “The method requires large datasets and use statistics to test the hypothesis and make the research project valid” \cite{hakansson_research_method}.
 
 Regarding ethical issues, data collection from the smartphones, \gls{gps} devices, and other mobile sensors should comfort the \gls{gdpr} as they are a kind of private data. Also, there should not be any negative effect on sustainability or social issues come from this thesis project.
 
